@@ -6,10 +6,12 @@
 | Manual test design | QA-002 Application exploration and test scope definition | Documentation complete, manual verification pending | [Application overview](manual/APPLICATION_OVERVIEW.md), [test scope](manual/TEST_SCOPE.md), and [functional checklist](manual/FUNCTIONAL_CHECKLIST.md) |
 | Test planning | QA-003 Test planning and risk assessment | Complete | [Test plan](manual/TEST_PLAN.md), [risk assessment](manual/RISK_ASSESSMENT.md), and [testing strategy](manual/TEST_STRATEGY.md) |
 | Manual scenario design | QA-004 Design test scenarios in Excel | Complete | [Test scenario workbook](test-cases/Test_Scenarios.xlsx) with prioritized scenarios and checklist traceability |
-| Automation foundation | QA-005 Set up the Maven automation project | Planned | Java dependencies, TestNG configuration, WebDriver lifecycle, and Page Object Model structure |
-| UI automation | QA-006 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
-| Continuous integration | QA-007 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
-| Portfolio review | QA-008 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
+| Detailed manual design | QA-005 Design detailed test cases and test data | Complete | [Test cases](test-cases/Test_Cases.xlsx), [test data](test-cases/Test_Data.xlsx), and [requirements traceability matrix](test-cases/RTM.xlsx) |
+| Manual execution | QA-006 Verify and execute manual tests | Planned | Verification of prerequisites, execution records, and evidence-backed defect reports |
+| Automation foundation | QA-007 Set up the Maven automation project | Planned | Java dependencies, TestNG configuration, WebDriver lifecycle, and Page Object Model structure |
+| UI automation | QA-008 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
+| Continuous integration | QA-009 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
+| Portfolio review | QA-010 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
 ## QA-002 verification remaining
 
@@ -27,4 +29,10 @@
 
 - The workbook contains 33 scenarios across registration, authentication, product catalog, shopping cart, and checkout. It includes 12 P0 scenarios, 21 P1 scenarios, and 10 provisional automation candidates.
 - The traceability matrix maps 19 functional checklist IDs and records `FC-CHK-005` as excluded from the public demo. It preserves the registration observation as user-reported evidence from one session.
-- Manual verification remains pending for 32 scenarios. Confirm current demo access, account and recovery behavior, available catalog controls, cart rules, and the safe checkout path before execution. Detailed test cases and execution records remain future work.
+- At QA-004, 32 scenarios remained pending manual verification and one carried a user-reported observation. QA-005 maps detailed cases to all 33 scenarios.
+
+## QA-005 detailed design outcome
+
+- The design contains 38 unique test cases and 21 test data records. All 33 QA-004 scenarios map to cases across 19 in-scope functional IDs. `FC-CHK-005` remains outside the public-demo scope.
+- All three workbooks reopened successfully. Validation checked numbered steps, expected results, source IDs, two-way data references, and workbook controls.
+- The current demo behavior remains pending manual verification for all 38 cases. Confirm access and the applicable account, catalog, quantity, and checkout rules before execution. The prior registration report applies to a single session.

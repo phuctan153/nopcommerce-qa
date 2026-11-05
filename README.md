@@ -12,12 +12,19 @@ The application under test is the [nopCommerce public demo storefront](https://d
 
 ## Planned scope
 
-Initial candidates include registration and sign-in, catalog browsing and search, product details, and cart updates. Checkout coverage will be defined in the test plan based on the demo's available options.
+Manual coverage includes registration and sign-in, catalog browsing and search, product details, and cart updates. Checkout coverage stops at the last safe pre-submit step available in the demo.
 
 ## Technology stack
 
-Manual QA planning uses Markdown, and structured scenario design uses Excel. UI automation is planned with Java, Selenium WebDriver, TestNG, and Maven, organized using Page Object Model. GitHub Actions is planned for a later phase.
+Manual QA planning uses Markdown. Scenarios, detailed test cases, synthetic data rules, and traceability use Excel. UI automation is planned with Java, Selenium WebDriver, TestNG, and Maven, organized using Page Object Model. GitHub Actions is planned for a later phase.
 
 ## Project status
 
-The [test scenario workbook](docs/test-cases/Test_Scenarios.xlsx) contains 33 designed scenarios for registration, authentication, catalog, cart, and checkout, with traceability to the functional checklist. The workbook records verification status separately from test execution. Detailed test cases, manual execution, automation, and CI remain planned. See the [task tracker](docs/TASKS.md) for the project sequence.
+QA-005 produced 38 detailed cases mapped to all 33 QA-004 scenarios. Manual verification and execution remain pending. See the [task tracker](docs/TASKS.md) for the project sequence.
+
+| Workbook | Contents |
+| --- | --- |
+| [Test scenarios](docs/test-cases/Test_Scenarios.xlsx) | QA-004 coverage, priorities, and scenario IDs |
+| [Test cases](docs/test-cases/Test_Cases.xlsx) | Numbered steps, preconditions, expected results, and data references |
+| [Test data](docs/test-cases/Test_Data.xlsx) | Reusable synthetic inputs and per-run fixture rules |
+| [Requirements traceability](docs/test-cases/RTM.xlsx) | Functional ID to scenario to test case mappings, plus verification gaps and exclusions |
