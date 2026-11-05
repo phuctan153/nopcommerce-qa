@@ -1,0 +1,26 @@
+# Java and Maven build output
+*.class
+target/
+
+# Local VS Code settings
+.vscode/
+*.code-workspace
+
+# Generated test output
+test-output/
+surefire-reports/
+failsafe-reports/
+allure-results/
+allure-report/
+*.log
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+local.properties
+*.local.properties
+
+# OS metadata
+.DS_Store
+Thumbs.db
