@@ -7,7 +7,8 @@
 | Test planning | QA-003 Test planning and risk assessment | Complete | [Test plan](manual/TEST_PLAN.md), [risk assessment](manual/RISK_ASSESSMENT.md), and [testing strategy](manual/TEST_STRATEGY.md) |
 | Manual scenario design | QA-004 Design test scenarios in Excel | Complete | [Test scenario workbook](test-cases/Test_Scenarios.xlsx) with prioritized scenarios and checklist traceability |
 | Detailed manual design | QA-005 Design detailed test cases and test data | Complete | [Test cases](test-cases/Test_Cases.xlsx), [test data](test-cases/Test_Data.xlsx), and [requirements traceability matrix](test-cases/RTM.xlsx) |
-| Manual execution | QA-006 Verify and execute manual tests | Planned | Verification of prerequisites, execution records, and evidence-backed defect reports |
+| Manual execution setup | QA-006.1 Prepare manual execution artifacts | Complete | [Execution workbook](test-execution/Test_Execution.xlsx), [execution guide](test-execution/EXECUTION_GUIDE.md), and [evidence conventions](test-execution/evidence/README.md) |
+| Manual execution | QA-006.2 Verify and execute manual tests | Planned | Verification of prerequisites, execution records, and evidence-backed defect reports |
 | Automation foundation | QA-007 Set up the Maven automation project | Planned | Java dependencies, TestNG configuration, WebDriver lifecycle, and Page Object Model structure |
 | UI automation | QA-008 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
 | Continuous integration | QA-009 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
@@ -36,3 +37,9 @@
 - The design contains 38 unique test cases and 21 test data records. All 33 QA-004 scenarios map to cases across 19 in-scope functional IDs. `FC-CHK-005` remains outside the public-demo scope.
 - All three workbooks reopened successfully. Validation checked numbered steps, expected results, source IDs, two-way data references, and workbook controls.
 - The current demo behavior remains pending manual verification for all 38 cases. Confirm access and the applicable account, catalog, quantity, and checkout rules before execution. The prior registration report applies to a single session.
+
+## QA-006.1 setup outcome
+
+- The execution workbook imports all 38 QA-005 cases with one unique execution ID per case. The initial status is Not Run for every row.
+- Module and overall formulas were validated against the initial state and temporary in-memory status changes. Execution fields and evidence remain empty pending manual execution.
+- QA-006.2 remains planned. The tester should confirm storefront access and prepare a clean browser session and synthetic fixtures before the first authorized run.
