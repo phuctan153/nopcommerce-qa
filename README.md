@@ -16,8 +16,8 @@ Initial candidates include registration and sign-in, catalog browsing and search
 
 ## Technology stack
 
-Manual QA artifacts use Markdown and versioned synthetic test data. UI automation is planned with Java, Selenium WebDriver, TestNG, and Maven, organized using Page Object Model. GitHub Actions is planned for a later phase.
+Manual QA planning uses Markdown, and structured scenario design uses Excel. UI automation is planned with Java, Selenium WebDriver, TestNG, and Maven, organized using Page Object Model. GitHub Actions is planned for a later phase.
 
 ## Project status
 
-QA-001 establishes the repository structure and contribution guidelines. Test design, manual execution, automation implementation, and CI setup are planned. See the [task tracker](docs/TASKS.md) for the project sequence.
+The [test scenario workbook](docs/test-cases/Test_Scenarios.xlsx) contains 33 designed scenarios for registration, authentication, catalog, cart, and checkout, with traceability to the functional checklist. The workbook records verification status separately from test execution. Detailed test cases, manual execution, automation, and CI remain planned. See the [task tracker](docs/TASKS.md) for the project sequence.

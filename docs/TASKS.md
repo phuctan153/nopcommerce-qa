@@ -5,7 +5,7 @@
 | Foundation | QA-001 Initialize project structure | Complete | Repository layout, contribution guidelines, README, ignore rules, and task tracker |
 | Manual test design | QA-002 Application exploration and test scope definition | Documentation complete, manual verification pending | [Application overview](manual/APPLICATION_OVERVIEW.md), [test scope](manual/TEST_SCOPE.md), and [functional checklist](manual/FUNCTIONAL_CHECKLIST.md) |
 | Test planning | QA-003 Test planning and risk assessment | Complete | [Test plan](manual/TEST_PLAN.md), [risk assessment](manual/RISK_ASSESSMENT.md), and [testing strategy](manual/TEST_STRATEGY.md) |
-| Manual design and execution | QA-004 Design and execute manual tests | Planned | Prioritized test cases and synthetic data, followed by execution records, evidence, and defect reports for observed issues |
+| Manual scenario design | QA-004 Design test scenarios in Excel | Complete | [Test scenario workbook](test-cases/Test_Scenarios.xlsx) with prioritized scenarios and checklist traceability |
 | Automation foundation | QA-005 Set up the Maven automation project | Planned | Java dependencies, TestNG configuration, WebDriver lifecycle, and Page Object Model structure |
 | UI automation | QA-006 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
 | Continuous integration | QA-007 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
@@ -22,3 +22,9 @@
 
 - TP-001 prioritizes account access, finding a purchasable product, cart accuracy, and safe pre-submit checkout. The risk register distinguishes documented or observed conditions from potential risks.
 - QA-003 completed planning only. The QA-002 verification items above carry forward. Before detailed case design, confirm reachability and fixtures and resolve configuration-dependent expectations where possible.
+
+## QA-004 scenario design outcome
+
+- The workbook contains 33 scenarios across registration, authentication, product catalog, shopping cart, and checkout. It includes 12 P0 scenarios, 21 P1 scenarios, and 10 provisional automation candidates.
+- The traceability matrix maps 19 functional checklist IDs and records `FC-CHK-005` as excluded from the public demo. It preserves the registration observation as user-reported evidence from one session.
+- Manual verification remains pending for 32 scenarios. Confirm current demo access, account and recovery behavior, available catalog controls, cart rules, and the safe checkout path before execution. Detailed test cases and execution records remain future work.
