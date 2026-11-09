@@ -2,7 +2,7 @@
 
 ## Purpose and stack
 
-This portfolio demonstrates manual testing and browser UI automation for the public nopCommerce demo. The planned automation stack is Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. GitHub Actions will run the suite in a later phase. Check [the task tracker](docs/TASKS.md) before expanding the current scope.
+This portfolio demonstrates manual testing and browser UI automation for the public nopCommerce demo. The automation module uses Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. GitHub Actions will run the suite in a later phase. Read the [project handoff](docs/HANDOFF.md) and [task tracker](docs/TASKS.md) before expanding the current scope.
 
 ## Java standards
 
@@ -29,6 +29,7 @@ This portfolio demonstrates manual testing and browser UI automation for the pub
 - Write clear English in Markdown. Use stable identifiers such as `TC-001` for test cases, `BUG-001` for defects, and `QA-001` for project tasks.
 - Link defects and execution records to related test cases when available. Record the environment, reproducible steps, expected and actual behavior, and sanitized evidence for observed defects.
 - Keep planned coverage separate from observed results. Record actual outcomes with the run date and environment. Use synthetic data and redact sensitive information from shared evidence.
+- Update the handoff and any affected run instructions when a task changes the project state. Record the next task, verification performed, and remaining gaps.
 
 ## Git workflow
 

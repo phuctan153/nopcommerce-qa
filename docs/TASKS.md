@@ -8,10 +8,10 @@
 | Manual scenario design | QA-004 Design test scenarios in Excel | Complete | [Test scenario workbook](test-cases/Test_Scenarios.xlsx) with prioritized scenarios and checklist traceability |
 | Detailed manual design | QA-005 Design detailed test cases and test data | Complete | [Test cases](test-cases/Test_Cases.xlsx), [test data](test-cases/Test_Data.xlsx), and [requirements traceability matrix](test-cases/RTM.xlsx) |
 | Manual execution setup | QA-006.1 Prepare manual execution artifacts | Complete | [Execution workbook](test-execution/Test_Execution.xlsx), [execution guide](test-execution/EXECUTION_GUIDE.md), and [evidence conventions](test-execution/evidence/README.md) |
-| Manual execution | QA-006.2 Verify and execute manual tests | In progress | Tester observations, verification of prerequisites, and execution records |
+| Manual execution | QA-006.2 Verify and execute manual tests | Execution recorded, follow-up deferred | [Execution workbook](test-execution/Test_Execution.xlsx) and [handoff notes](HANDOFF.md) |
 | Defect management setup | QA-007.1 Prepare defect management artifacts | Complete | [Bug tracking workbook](bug-reports/Bug_Tracking.xlsx), [lifecycle and severity guidelines](bug-reports/DEFECT_MANAGEMENT.md), [report template](bug-reports/BUG_REPORT_TEMPLATE.md), and [Jira reporting guide](bug-reports/BUG_REPORTING_GUIDE.md) |
 | Defect management | QA-007.2 Triage, report, and retest defects | Open | Evidence-backed defect records and retest or regression results when applicable |
-| Automation foundation | QA-008 Set up the Maven automation project | Planned | Java dependencies, TestNG configuration, WebDriver lifecycle, and Page Object Model structure |
+| Automation foundation | QA-008 Set up the Maven automation project | Complete | [Maven module](../automation/pom.xml) and [automation guide](../automation/README.md) |
 | UI automation | QA-009 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
 | Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
@@ -38,7 +38,7 @@
 
 - The design contains 38 unique test cases and 21 test data records. All 33 QA-004 scenarios map to cases across 19 in-scope functional IDs. `FC-CHK-005` remains outside the public-demo scope.
 - All three workbooks reopened successfully. Validation checked numbered steps, expected results, source IDs, two-way data references, and workbook controls.
-- The current demo behavior remains pending manual verification for all 38 cases. Confirm access and the applicable account, catalog, quantity, and checkout rules before execution. The prior registration report applies to a single session.
+- The execution workbook records subsequent demo observations. Some conditional expectations still require verification before retesting or automation.
 
 ## QA-006.1 setup outcome
 
@@ -49,4 +49,14 @@
 ## QA-007.1 setup outcome
 
 - The Bug Register contains zero defects. Its dashboard, filters, frozen headers, and dropdowns were validated. Formula checks used temporary entries held only in memory.
-- QA-006.2 awaits real tester observations. QA-007.2 remains open for triage, evidence-backed reporting, and retest or regression work when applicable. Jira keys are recorded only after a real issue exists in an authorized project.
+- QA-007.2 remains open for triage, evidence-backed reporting, and retest or regression work when applicable. Jira keys are recorded only after a real issue exists in an authorized project.
+
+## QA-006.2 execution checkpoint
+
+- The tester recorded outcomes for all 38 cases across Registration, Authentication, Product Catalog, Shopping Cart, and Checkout. The workbook reports 28 Pass, 3 Fail, 5 Blocked, and 2 Skipped.
+- The tester agreed to proceed with automation foundation work and defer manual evidence follow-up. The [handoff](HANDOFF.md) lists the open prerequisites and pre-submit checkout gap.
+
+## QA-008 foundation outcome
+
+- The Maven module compiles for Java 17 and uses Selenium WebDriver and TestNG. It supports Chrome and Edge, configurable storefront URL and headless mode, and per-method WebDriver setup and teardown.
+- On 2026-11-09, `mvn -f automation/pom.xml test` passed all three browser-free configuration tests on Windows with JDK 21.0.4 and Maven 3.9.9. Browser startup and storefront behavior remain for QA-009.
