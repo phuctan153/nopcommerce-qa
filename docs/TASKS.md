@@ -20,6 +20,7 @@
 | UI automation | QA-009.5 Automate cart removal smoke scenario | Complete on local nopCommerce | [Independent TC-CART-006 run](../automation/README.md#qa-0095-cart-removal-smoke-test) |
 | UI automation | QA-009.6 Automate cart subtotal smoke scenario | Complete on local nopCommerce | [Independent TC-CART-007 run](../automation/README.md#qa-0096-cart-subtotal-smoke-test) |
 | UI automation | QA-009.7 Automate product details smoke scenario | Complete on local nopCommerce | [Independent TC-CAT-006 run](../automation/README.md#qa-0097-product-details-smoke-test) |
+| UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
 | Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
@@ -104,3 +105,8 @@
 
 - On 2026-11-10, `TC-CAT-006` used `TD-CAT-001` to open `Apple iPhone 16 128GB` from search results. The details matched the selected title and URL and displayed `$799.00`, `In stock`, and an enabled Add to cart button.
 - The independent test and all eleven tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
+
+## QA-009.8 verification outcome
+
+- On 2026-11-10, `TC-CAT-002` used `TD-CAT-002` to submit a generated alphanumeric search term. The results displayed zero product titles and the no-results message.
+- All three `ProductSearchTest` cases passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Maven reported zero failures, errors, and skips.

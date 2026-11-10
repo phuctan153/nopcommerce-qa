@@ -11,16 +11,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public final class SearchResultsPage {
 
-    private static final By RESULTS = By.cssSelector(".search-results .products-wrapper");
+    private static final By RESULTS = By.cssSelector(".search-results");
+    private static final By NO_RESULTS = By.cssSelector(".search-results .no-result");
     private static final By PRODUCT_TITLE = By.cssSelector(".product-title a");
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public SearchResultsPage(WebDriver driver) {
         this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public List<String> visibleProductTitles() {
         return visibleProductLinks().stream().map(WebElement::getText).toList();
+    }
+
+    public String noResultsMessage() {
+        return wait.withMessage("The no-results message did not appear.")
+                .until(ExpectedConditions.visibilityOfElementLocated(NO_RESULTS)).getText();
     }
 
     public ProductDetailsPage openProduct(String title) {
@@ -40,8 +48,7 @@ public final class SearchResultsPage {
     }
 
     private List<WebElement> visibleProductLinks() {
-        WebElement results = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .withMessage(() -> "Search results did not become visible. Page title: " + driver.getTitle())
+        WebElement results = wait.withMessage(() -> "Search results did not become visible. Page title: " + driver.getTitle())
                 .until(ExpectedConditions.visibilityOfElementLocated(RESULTS));
 
         return results.findElements(PRODUCT_TITLE).stream()

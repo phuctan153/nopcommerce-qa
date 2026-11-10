@@ -25,6 +25,7 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-009.5 | Complete on local nopCommerce. Cart removal passed independently and in the nine-test suite. |
 | QA-009.6 | Complete on local nopCommerce. Cart subtotal reconciliation passed independently and in the ten-test suite. |
 | QA-009.7 | Complete on local nopCommerce. Product details passed independently and in the eleven-test suite. |
+| QA-009.8 | Complete on local nopCommerce. Search with no results passed in the three-case search and details run. |
 | Remaining QA-009, QA-010, and QA-011 | Additional smoke tests, GitHub Actions, and portfolio review are planned. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
@@ -48,9 +49,10 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, [the cart removal smoke test](../automation/README.md#qa-0095-cart-removal-smoke-test) confirmed that removing the first line preserved the other line and removing the last line emptied the cart. The independent run passed one test and the full run passed all nine with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
 - On 2026-11-10, [the cart subtotal smoke test](../automation/README.md#qa-0096-cart-subtotal-smoke-test) matched the calculated amounts at quantities one and two. The independent run passed one test and the full run passed all ten with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
 - On 2026-11-10, [the product details smoke test](../automation/README.md#qa-0097-product-details-smoke-test) verified the selected listing's title and URL, price, stock status, and enabled Add to cart button. The independent run passed one test and the full run passed eleven with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
+- On 2026-11-10, [the no-results smoke test](../automation/README.md#qa-0098-search-with-no-results) verified that a nonmatching query showed the empty results message and zero product titles. All three search and details tests passed on local nopCommerce 4.90.7 with headless Chrome.
 
 ## Next session
 
 1. Follow the [full suite instructions](../automation/README.md#run-the-full-suite-locally) to start the local storefront, load the shopper fixtures, and verify the current suite before expanding QA-009.
-2. Automate `TC-CAT-002` next. Submit a valid nonmatching query and verify that the results page shows no product and displays the no-results message. Use the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), and [traceability matrix](test-cases/RTM.xlsx).
+2. Automate `TC-CAT-004` and `TC-CAT-005` next. Verify the Electronics category and its Cell phones child using the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), and [traceability matrix](test-cases/RTM.xlsx).
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.

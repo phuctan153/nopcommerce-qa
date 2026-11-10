@@ -5,6 +5,7 @@ import com.nopcommerce.qa.pages.ProductDetailsPage;
 import com.nopcommerce.qa.pages.SearchResultsPage;
 import com.nopcommerce.qa.support.BaseTest;
 import java.util.List;
+import java.util.UUID;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -39,5 +40,16 @@ public class ProductSearchTest extends BaseTest {
         assertEquals(details.price(), "$799.00", "Unexpected price for the local iPhone fixture.");
         assertEquals(details.stockStatus(), "In stock", "The local iPhone fixture should be in stock.");
         assertTrue(details.canAddToCart(), "The Add to cart button should be visible and enabled.");
+    }
+
+    @Test(groups = "smoke", description = "TC-CAT-002: Show a useful state for a valid nonmatching query")
+    public void nonmatchingQueryShowsNoResultsMessageAndNoProducts() {
+        String query = "qanonmatch" + UUID.randomUUID().toString().replace("-", "");
+        SearchResultsPage results = new HomePage(driver()).open(config().baseUrl()).searchFor(query);
+
+        assertEquals(results.visibleProductTitles(), List.of(),
+                "Expected no products for query '" + query + "'.");
+        assertEquals(results.noResultsMessage(), "No products were found that matched your criteria.",
+                "Unexpected no-results message for query '" + query + "'.");
     }
 }

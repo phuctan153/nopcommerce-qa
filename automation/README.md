@@ -28,16 +28,16 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" 
 
 Use `"-Dheadless=true"` to run with the browser window hidden. Each UI test opens and closes its own browser session.
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and eight automated browser cases:
+Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and nine automated browser cases:
 
 | Test class | Coverage |
 | --- | --- |
 | `TestConfigTest` | Default settings, overrides, and invalid headless flag |
-| `ProductSearchTest` | `TC-CAT-001` product search and `TC-CAT-006` product details |
+| `ProductSearchTest` | `TC-CAT-001` product search, `TC-CAT-002` no results, and `TC-CAT-006` product details |
 | `AuthenticationSmokeTest` | `TC-AUTH-001` login and `TC-AUTH-004` logout |
 | `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, `TC-CART-006` remove, and `TC-CART-007` reconcile subtotal |
 
-Check the Maven summary for eleven tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
+Check the Maven summary for twelve tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
 
 ### Run selected checks
 
@@ -202,9 +202,17 @@ On 2026-11-10, the independent run passed one test and the full suite passed ten
 mvn -f automation/pom.xml "-Dtest=ProductSearchTest#selectingProductOpensMatchingPurchasableDetails" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
-Use `"-Dtest=ProductSearchTest"` to run both catalog cases.
-
 On 2026-11-10, the independent run passed one test and the full suite passed eleven tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips. The [manual screenshot](../docs/test-execution/evidence/Product/TC-CAT-006_20261109_01.png) records the earlier public demo observation for `EXE-CAT-006`.
+
+## QA-009.8 search with no results
+
+`ProductSearchTest` covers `TC-CAT-002` using `TD-CAT-002`. The test generates an uncommon alphanumeric term, submits it through the storefront search box, and verifies that the results contain no products and display `No products were found that matched your criteria.`
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ProductSearchTest#nonmatchingQueryShowsNoResultsMessageAndNoProducts" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+Use `"-Dtest=ProductSearchTest"` to run all three search and product details cases. On 2026-11-10, all three passed on local nopCommerce 4.90.7 with headless Chrome.
 
 ## Source layout
 
