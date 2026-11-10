@@ -1,0 +1,33 @@
+name: nopcommerce-qa
+
+services:
+  storefront:
+    image: nopcommerceteam/nopcommerce:4.90.7
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - storefront-data:/app/App_Data
+      - storefront-images:/app/wwwroot/images
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: nopcommerce
+      POSTGRES_USER: nopcommerce
+      POSTGRES_PASSWORD: ${NOP_QA_DB_PASSWORD:?Set NOP_QA_DB_PASSWORD in automation/.env}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "nopcommerce", "-d", "nopcommerce"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - database-data:/var/lib/postgresql/data
+      - ./qa-postgres-init.sql:/docker-entrypoint-initdb.d/10-nopcommerce.sql:ro
+
+volumes:
+  storefront-data:
+  storefront-images:
+  database-data:
