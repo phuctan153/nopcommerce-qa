@@ -10,6 +10,7 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
 public class ShoppingCartSmokeTest extends BaseTest {
 
@@ -67,6 +68,21 @@ public class ShoppingCartSmokeTest extends BaseTest {
         assertEquals(cart.visibleLines(), List.of(), "Expected no product lines in the empty cart.");
     }
 
+    @Test(groups = "smoke", description = "TC-CART-007: Reconcile subtotal before and after a quantity update")
+    public void subtotalMatchesCalculatedLineTotalBeforeAndAfterQuantityUpdate() {
+        int initialQuantity = 1;
+        int updatedQuantity = 2;
+        ShoppingCartPage cart = addProductToCart(DEFAULT_PRODUCT, DEFAULT_PRODUCT, initialQuantity);
+        CartLine initialLine = assertSingleLine(cart, DEFAULT_PRODUCT, initialQuantity);
+        assertSubtotal(cart, initialLine);
+
+        cart.updateQuantity(DEFAULT_PRODUCT, updatedQuantity);
+        CartLine updatedLine = assertSingleLine(cart, DEFAULT_PRODUCT, updatedQuantity);
+        assertEquals(updatedLine.unitPrice(), initialLine.unitPrice(),
+                "The unit price should stay the same for the undiscounted fixture.");
+        assertSubtotal(cart, updatedLine);
+    }
+
     private ShoppingCartPage addProductToCart(String productName, int quantity) {
         return addProductToCart(System.getProperty("cartSearchQuery", DEFAULT_PRODUCT), productName, quantity);
     }
@@ -88,10 +104,23 @@ public class ShoppingCartSmokeTest extends BaseTest {
     }
 
     private void assertLineTotal(CartLine line) {
-        BigDecimal expected = parseUsd(line.unitPrice()).multiply(BigDecimal.valueOf(line.quantity()));
+        BigDecimal expected = expectedLineTotal(line);
         BigDecimal actual = parseUsd(line.lineTotal());
         assertEquals(actual.compareTo(expected), 0,
                 "Expected a line total of " + expected + " for " + line);
+    }
+
+    private void assertSubtotal(ShoppingCartPage cart, CartLine line) {
+        assertFalse(cart.hasVisibleSubtotalDiscount(), "Expected an undiscounted cart fixture.");
+        assertLineTotal(line);
+        BigDecimal expected = expectedLineTotal(line);
+        BigDecimal actual = parseUsd(cart.visibleSubtotal());
+        assertEquals(actual.compareTo(expected), 0,
+                "Expected cart subtotal " + expected + " for " + line + ", but saw " + actual);
+    }
+
+    private BigDecimal expectedLineTotal(CartLine line) {
+        return parseUsd(line.unitPrice()).multiply(BigDecimal.valueOf(line.quantity()));
     }
 
     private BigDecimal parseUsd(String amount) {

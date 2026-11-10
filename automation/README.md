@@ -28,16 +28,16 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" 
 
 Use `"-Dheadless=true"` to run with the browser window hidden. Each UI test opens and closes its own browser session.
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and six automated browser cases:
+Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and seven automated browser cases:
 
 | Test class | Coverage |
 | --- | --- |
 | `TestConfigTest` | Default settings, overrides, and invalid headless flag |
 | `ProductSearchTest` | `TC-CAT-001` product search |
 | `AuthenticationSmokeTest` | `TC-AUTH-001` login and `TC-AUTH-004` logout |
-| `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, and `TC-CART-006` remove |
+| `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, `TC-CART-006` remove, and `TC-CART-007` reconcile subtotal |
 
-Check the Maven summary for nine tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
+Check the Maven summary for ten tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
 
 ### Run selected checks
 
@@ -180,9 +180,19 @@ On 2026-11-10, the independent run passed one test and the full suite passed eig
 mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#removingProductsPreservesTheOtherLineUntilCartIsEmpty" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
-Use `"-Dtest=ShoppingCartSmokeTest"` to run all three cart cases.
-
 On 2026-11-10, the independent run passed one test and the full suite passed nine tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
+
+## QA-009.6 cart subtotal smoke test
+
+`ShoppingCartSmokeTest` covers `TC-CART-007` using `TD-CART-005`. It adds one `HTC smartphone` to a fresh guest cart, then updates the quantity to two. At both quantities it multiplies the displayed USD unit price by the observed quantity and compares the result with the line total and cart subtotal. The fixture uses a constant unit price and requires no displayed line or subtotal discount.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#subtotalMatchesCalculatedLineTotalBeforeAndAfterQuantityUpdate" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+Use `"-Dtest=ShoppingCartSmokeTest"` to run all four cart cases.
+
+On 2026-11-10, the independent run passed one test and the full suite passed ten tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
 
 ## Source layout
 

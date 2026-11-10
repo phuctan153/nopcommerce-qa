@@ -19,6 +19,8 @@ public final class ShoppingCartPage {
     private static final By LINE_TOTAL = By.cssSelector(".product-subtotal");
     private static final By REMOVE = By.cssSelector("button.remove-btn[name='updatecart']");
     private static final By EMPTY_CART = By.cssSelector(".shopping-cart-page .order-summary-content .no-data");
+    private static final By SUBTOTAL = By.cssSelector("table.cart-total .order-subtotal .value-summary");
+    private static final By SUBTOTAL_DISCOUNTS = By.cssSelector("td.subtotal .discount, .order-subtotal-discount");
 
     private final WebDriverWait wait;
 
@@ -60,6 +62,15 @@ public final class ShoppingCartPage {
                 .until(ExpectedConditions.visibilityOfElementLocated(EMPTY_CART)).getText();
     }
 
+    public String visibleSubtotal() {
+        return wait.withMessage("The cart subtotal did not become visible.")
+                .until(ExpectedConditions.visibilityOfNestedElementsLocatedBy(CART, SUBTOTAL)).get(0).getText();
+    }
+
+    public boolean hasVisibleSubtotalDiscount() {
+        return visibleCart().findElements(SUBTOTAL_DISCOUNTS).stream().anyMatch(WebElement::isDisplayed);
+    }
+
     private WebElement rowFor(String productName) {
         return visibleRows().stream()
                 .filter(item -> item.findElement(PRODUCT_NAME).getText().equals(productName))
@@ -68,9 +79,12 @@ public final class ShoppingCartPage {
     }
 
     private List<WebElement> visibleRows() {
-        WebElement cart = wait.withMessage("The shopping cart did not become visible.")
+        return visibleCart().findElements(CART_ROWS).stream().filter(WebElement::isDisplayed).toList();
+    }
+
+    private WebElement visibleCart() {
+        return wait.withMessage("The shopping cart did not become visible.")
                 .until(ExpectedConditions.visibilityOfElementLocated(CART));
-        return cart.findElements(CART_ROWS).stream().filter(WebElement::isDisplayed).toList();
     }
 
     public record CartLine(String productName, int quantity, String unitPrice, String lineTotal) {

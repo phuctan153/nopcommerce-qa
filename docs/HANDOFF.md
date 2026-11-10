@@ -23,6 +23,7 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-009.3 | Complete on local nopCommerce. Add-to-cart passed independently and in the seven-test suite. |
 | QA-009.4 | Complete on local nopCommerce. Cart quantity update passed independently and in the eight-test suite. |
 | QA-009.5 | Complete on local nopCommerce. Cart removal passed independently and in the nine-test suite. |
+| QA-009.6 | Complete on local nopCommerce. Cart subtotal reconciliation passed independently and in the ten-test suite. |
 | Remaining QA-009, QA-010, and QA-011 | Additional smoke tests, GitHub Actions, and portfolio review are planned. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
@@ -44,9 +45,10 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, [the add-to-cart smoke test](../automation/README.md#qa-0093-add-to-cart-smoke-test) verified one `HTC smartphone` cart line with quantity two. The independent run and the full seven-test suite passed on local nopCommerce with headless Chrome.
 - On 2026-11-10, [the cart quantity update smoke test](../automation/README.md#qa-0094-cart-quantity-update-smoke-test) confirmed that the reopened cart kept the updated quantity and displayed the corresponding line total. The independent run passed one test and the full run passed eight, including login and logout. Both runs used local nopCommerce 4.90.7 and headless Chrome on Windows 11 and reported zero failures, errors, and skips.
 - On 2026-11-10, [the cart removal smoke test](../automation/README.md#qa-0095-cart-removal-smoke-test) confirmed that removing the first line preserved the other line and removing the last line emptied the cart. The independent run passed one test and the full run passed all nine with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
+- On 2026-11-10, [the cart subtotal smoke test](../automation/README.md#qa-0096-cart-subtotal-smoke-test) matched the calculated amounts at quantities one and two. The independent run passed one test and the full run passed all ten with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
 
 ## Next session
 
 1. Follow the [full suite instructions](../automation/README.md#run-the-full-suite-locally) to start the local storefront, load the shopper fixtures, and verify the current suite before expanding QA-009.
-2. Review `TC-CART-007` for the next shopping cart smoke test. Use the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), [traceability matrix](test-cases/RTM.xlsx), and manual execution evidence. Keep scenarios independent and stop checkout at the last safe pre-submit step.
+2. Review the P0 case `TC-CAT-006` for the next catalog smoke test. Use the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), [traceability matrix](test-cases/RTM.xlsx), and manual execution evidence. Keep scenarios independent and stop checkout at the last safe pre-submit step.
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.
