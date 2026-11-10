@@ -1,6 +1,6 @@
 # nopCommerce QA Testing Portfolio
 
-This portfolio documents manual testing and UI automation for a sample e-commerce storefront. It includes test design, manual execution records, and a Maven module for the planned storefront smoke suite.
+This portfolio documents manual testing and UI automation for a sample e-commerce storefront. It includes test design, manual execution records, and a Maven smoke suite for shopper authentication, catalog navigation and search, and shopping cart behavior.
 
 The application under test is the [nopCommerce public demo storefront](https://demo.nopcommerce.com/).
 
@@ -18,15 +18,9 @@ Manual coverage includes registration and sign-in, catalog browsing and search, 
 
 Manual QA planning uses Markdown. Scenarios, detailed test cases, synthetic data rules, and traceability use Excel. The automation module uses Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. GitHub Actions is planned for a later phase.
 
-## Run the automation foundation
+## Run the smoke suite
 
-Install JDK 17 or later and Maven 3.9 or later. From the repository root, run:
-
-```powershell
-mvn -f automation/pom.xml test
-```
-
-QA-008 runs browser-free TestNG configuration checks. QA-009 will add storefront smoke tests. See the [automation guide](automation/README.md) for browser settings and report locations.
+Install JDK 17 or later, Maven 3.9 or later, Docker Desktop, and Chrome or Microsoft Edge. The suite includes 11 browser cases and three browser-free configuration checks. Follow the [local run instructions](automation/README.md#run-the-full-suite-locally) to start nopCommerce, load the shopper fixtures, run the tests, and open the report.
 
 ## Project status
 

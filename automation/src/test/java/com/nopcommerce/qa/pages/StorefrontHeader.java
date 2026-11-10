@@ -13,6 +13,9 @@ public final class StorefrontHeader {
     private static final By ACCOUNT = By.cssSelector(".header-links a.ico-account");
     private static final By SIGN_OUT = By.cssSelector(".header-links a.ico-logout");
     private static final By CART = By.cssSelector(".header-links a.ico-cart");
+    private static final By TOP_LEVEL_CATEGORY = By.cssSelector(
+            ".header-menu .menu > .menu__item > a.menu__link, "
+                    + ".header-menu .menu > .menu__item > .menu__item-toggle > a.menu__link");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -40,6 +43,16 @@ public final class StorefrontHeader {
     public ShoppingCartPage openCart() {
         wait.until(ExpectedConditions.elementToBeClickable(CART)).click();
         return new ShoppingCartPage(driver);
+    }
+
+    public CategoryPage openTopLevelCategory(String name) {
+        wait.withMessage("The top-level category link was unavailable for " + name)
+                .until(browser -> browser.findElements(TOP_LEVEL_CATEGORY).stream()
+                        .filter(link -> link.isDisplayed() && link.isEnabled() && link.getText().equals(name))
+                        .findFirst()
+                        .orElse(null))
+                .click();
+        return new CategoryPage(driver);
     }
 
     public boolean isSignedIn() {

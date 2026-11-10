@@ -12,7 +12,7 @@
 | Defect management setup | QA-007.1 Prepare defect management artifacts | Complete | [Bug tracking workbook](bug-reports/Bug_Tracking.xlsx), [lifecycle and severity guidelines](bug-reports/DEFECT_MANAGEMENT.md), [report template](bug-reports/BUG_REPORT_TEMPLATE.md), and [Jira reporting guide](bug-reports/BUG_REPORTING_GUIDE.md) |
 | Defect management | QA-007.2 Triage, report, and retest defects | Open | Evidence-backed defect records and retest or regression results when applicable |
 | Automation foundation | QA-008 Set up the Maven automation project | Complete | [Maven module](../automation/pom.xml) and [automation guide](../automation/README.md) |
-| UI automation | QA-009 Automate priority smoke scenarios | In progress | A runnable smoke suite and generated test reports |
+| UI automation | QA-009 Automate priority smoke scenarios | Complete on local nopCommerce | [Eleven browser cases and three configuration checks](../automation/README.md#run-the-full-suite-locally) |
 | UI automation | QA-009.1 First real browser smoke test | Complete on local nopCommerce. Public demo blocked. | [Independent TC-CAT-001 run](../automation/README.md#qa-0091-product-search) and [local QA environment](../automation/README.md#local-nopcommerce-qa-environment) |
 | UI automation | QA-009.2 Automate login and logout smoke scenarios | Complete on local nopCommerce | [TC-AUTH-001 and TC-AUTH-004 runs](../automation/README.md#qa-0092-authentication-smoke-tests) |
 | UI automation | QA-009.3 Automate add-to-cart smoke scenario | Complete on local nopCommerce | [Independent TC-CART-001 run](../automation/README.md#qa-0093-add-to-cart-smoke-test) |
@@ -21,6 +21,7 @@
 | UI automation | QA-009.6 Automate cart subtotal smoke scenario | Complete on local nopCommerce | [Independent TC-CART-007 run](../automation/README.md#qa-0096-cart-subtotal-smoke-test) |
 | UI automation | QA-009.7 Automate product details smoke scenario | Complete on local nopCommerce | [Independent TC-CAT-006 run](../automation/README.md#qa-0097-product-details-smoke-test) |
 | UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
+| UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
@@ -110,3 +111,9 @@
 
 - On 2026-11-10, `TC-CAT-002` used `TD-CAT-002` to submit a generated alphanumeric search term. The results displayed zero product titles and the no-results message.
 - All three `ProductSearchTest` cases passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Maven reported zero failures, errors, and skips.
+
+## QA-009.9 verification outcome
+
+- On 2026-11-10, `TC-CAT-004` opened Electronics from the storefront menu and verified its heading and subcategories. `TC-CAT-005` opened Cell phones from the parent category and verified the child heading, breadcrumb, and sample iPhone listing. Both used `TD-CAT-004`.
+- Both category cases and all fourteen tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
+- All eleven cases marked for automation in the current case workbook map to distinct browser tests. QA-010 is the next phase for running the suite and publishing its reports through GitHub Actions.

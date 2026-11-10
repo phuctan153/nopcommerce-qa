@@ -28,16 +28,17 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" 
 
 Use `"-Dheadless=true"` to run with the browser window hidden. Each UI test opens and closes its own browser session.
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and nine automated browser cases:
+Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and eleven automated browser cases.
 
 | Test class | Coverage |
 | --- | --- |
 | `TestConfigTest` | Default settings, overrides, and invalid headless flag |
 | `ProductSearchTest` | `TC-CAT-001` product search, `TC-CAT-002` no results, and `TC-CAT-006` product details |
+| `CategoryNavigationTest` | `TC-CAT-004` top-level category and `TC-CAT-005` subcategory |
 | `AuthenticationSmokeTest` | `TC-AUTH-001` login and `TC-AUTH-004` logout |
 | `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, `TC-CART-006` remove, and `TC-CART-007` reconcile subtotal |
 
-Check the Maven summary for twelve tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
+Check the Maven summary for fourteen tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
 
 ### Run selected checks
 
@@ -213,6 +214,16 @@ mvn -f automation/pom.xml "-Dtest=ProductSearchTest#nonmatchingQueryShowsNoResul
 ```
 
 Use `"-Dtest=ProductSearchTest"` to run all three search and product details cases. On 2026-11-10, all three passed on local nopCommerce 4.90.7 with headless Chrome.
+
+## QA-009.9 category navigation smoke tests
+
+`CategoryNavigationTest` covers `TC-CAT-004` and `TC-CAT-005` using `TD-CAT-004`. The first case opens Electronics through the storefront menu and checks its heading and sample subcategories. The second opens Cell phones through the Electronics landing page and checks its heading, the Home / Electronics / Cell phones breadcrumb, and the sample iPhone listing.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=CategoryNavigationTest" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+On 2026-11-10, both category tests passed in the focused run, and all fourteen tests passed in the full suite on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
 
 ## Source layout
 
