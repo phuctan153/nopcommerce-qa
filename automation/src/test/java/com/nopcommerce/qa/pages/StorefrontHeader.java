@@ -12,6 +12,7 @@ public final class StorefrontHeader {
     private static final By SIGN_IN = By.cssSelector(".header-links a.ico-login");
     private static final By ACCOUNT = By.cssSelector(".header-links a.ico-account");
     private static final By SIGN_OUT = By.cssSelector(".header-links a.ico-logout");
+    private static final By CART = By.cssSelector(".header-links a.ico-cart");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -34,6 +35,11 @@ public final class StorefrontHeader {
     public HomePage signOut() {
         wait.until(ExpectedConditions.elementToBeClickable(SIGN_OUT)).click();
         return new HomePage(driver);
+    }
+
+    public ShoppingCartPage openCart() {
+        wait.until(ExpectedConditions.elementToBeClickable(CART)).click();
+        return new ShoppingCartPage(driver);
     }
 
     public boolean isSignedIn() {

@@ -119,15 +119,35 @@ On 2026-11-10, each authentication test passed independently on local nopCommerc
 
 ## QA-009.3 add-to-cart smoke test
 
-`ShoppingCartSmokeTest` covers `TC-CART-001` using `TD-CART-001` in a fresh guest session. The local sample fixture is `HTC smartphone`, a purchasable product with no required options. The test opens its details page, adds two units, and checks that the cart contains one line for that product with quantity two. It does not enter checkout.
+`ShoppingCartSmokeTest` covers `TC-CART-001` using `TD-CART-001` in a fresh guest session. The local sample fixture is `HTC smartphone`, a purchasable product with no required options. The test opens its details page, adds two units, and checks that the cart contains one line for that product with quantity two.
 
 ```powershell
-mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#addingProductShowsTheRequestedQuantityInCart" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
 To use another catalog fixture, override `cartSearchQuery` and `cartProduct` together. Use a published product with no required options that supports quantity two.
 
 On 2026-11-10, the independent cart test and all seven tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
+
+## QA-009.4 cart quantity update smoke test
+
+`ShoppingCartSmokeTest` covers `TC-CART-003` using `TD-CART-001`. See the [test case workbook](../docs/test-cases/Test_Cases.xlsx) and the [manual execution record](../docs/test-execution/Test_Execution.xlsx) for `EXE-CART-003`.
+
+In a fresh guest session, the test adds one `HTC smartphone` and checks its initial quantity and line total. It changes the quantity to two, leaves the field to submit the update, returns to the storefront home page, and reopens the cart from the header. It checks that the same product still appears on a single line with quantity two and that the line total equals the displayed unit price multiplied by two.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#updatedQuantityAndLineTotalPersistWhenCartIsReopened" "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=true" test
+```
+
+Use `"-Dtest=ShoppingCartSmokeTest"` to run both cart cases. For the full local suite, first load the shopper variables from [authentication setup](#qa-0092-authentication-smoke-tests), then run:
+
+```powershell
+mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=true" test
+```
+
+For a fixture override, use a product that supports quantities one and two with an editable quantity field and USD prices where the displayed unit price times the quantity equals the line total.
+
+On 2026-11-10, the independent run passed one test and the full suite passed eight tests on local nopCommerce 4.90.7 with headless Chrome 156.0.8078.80 on Windows 11. Both runs reported zero failures, errors, and skips. The full run included both authentication cases with the local shopper fixtures.
 
 ## Source layout
 
