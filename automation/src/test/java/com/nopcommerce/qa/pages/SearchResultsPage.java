@@ -24,12 +24,19 @@ public final class SearchResultsPage {
     }
 
     public ProductDetailsPage openProduct(String title) {
-        WebElement productLink = visibleProductLinks().stream()
+        productLink(title).click();
+        return new ProductDetailsPage(driver);
+    }
+
+    public String productUrl(String title) {
+        return productLink(title).getDomProperty("href");
+    }
+
+    private WebElement productLink(String title) {
+        return visibleProductLinks().stream()
                 .filter(link -> link.getText().equals(title))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Product was not visible in search results: " + title));
-        productLink.click();
-        return new ProductDetailsPage(driver);
     }
 
     private List<WebElement> visibleProductLinks() {

@@ -28,16 +28,16 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" 
 
 Use `"-Dheadless=true"` to run with the browser window hidden. Each UI test opens and closes its own browser session.
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and seven automated browser cases:
+Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and eight automated browser cases:
 
 | Test class | Coverage |
 | --- | --- |
 | `TestConfigTest` | Default settings, overrides, and invalid headless flag |
-| `ProductSearchTest` | `TC-CAT-001` product search |
+| `ProductSearchTest` | `TC-CAT-001` product search and `TC-CAT-006` product details |
 | `AuthenticationSmokeTest` | `TC-AUTH-001` login and `TC-AUTH-004` logout |
 | `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, `TC-CART-006` remove, and `TC-CART-007` reconcile subtotal |
 
-Check the Maven summary for ten tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
+Check the Maven summary for eleven tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
 
 ### Run selected checks
 
@@ -50,7 +50,7 @@ mvn -f automation/pom.xml "-Dtest=TestConfigTest" test
 Run the search smoke test independently:
 
 ```powershell
-mvn -f automation/pom.xml "-Dtest=ProductSearchTest" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+mvn -f automation/pom.xml "-Dtest=ProductSearchTest#validQueryReturnsExpectedProduct" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
 If Maven reports a `PKIX path building failed` error on Windows and the required certificate is trusted by Windows, run Maven with the Windows root store in a temporary PowerShell session:
@@ -85,7 +85,7 @@ Keep any test credentials in local environment variables or CI secrets.
 The smoke test checks for the configured product title among the visible results on the first page. It makes no assertion about result order, count, or price. If the catalog changes, verify a current published product and choose a query that returns it on the first page. Override both properties together, for example:
 
 ```powershell
-mvn -f automation/pom.xml "-Dtest=ProductSearchTest" "-Dheadless=true" "-DsearchQuery=iphone" "-DexpectedProduct=Apple iPhone 16 128GB" test
+mvn -f automation/pom.xml "-Dtest=ProductSearchTest#validQueryReturnsExpectedProduct" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" "-DsearchQuery=iphone" "-DexpectedProduct=Apple iPhone 16 128GB" test
 ```
 
 On 2026-11-10, Chrome 156.0.8078.80 launched in headless mode on Windows 11. The public demo displayed a security verification page titled `Just a moment...`. The test timed out waiting for the storefront search field and Maven recorded a failure. A separate run against a temporary fixture verified form submission and product matching. The same smoke test later passed against the installed nopCommerce QA instance below. Search on the public demo remains unverified by Selenium.
@@ -118,7 +118,7 @@ On 2026-11-10, the nopCommerce 4.90.7 sample catalog returned `Apple iPhone 16 1
 mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=true" test
 ```
 
-Add `"-Dtest=ProductSearchTest"` to run only the browser smoke test.
+Add `"-Dtest=ProductSearchTest#validQueryReturnsExpectedProduct"` to run only the search smoke test.
 
 ## QA-009.2 authentication smoke tests
 
@@ -193,6 +193,18 @@ mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#subtotalMatchesCalculate
 Use `"-Dtest=ShoppingCartSmokeTest"` to run all four cart cases.
 
 On 2026-11-10, the independent run passed one test and the full suite passed ten tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
+
+## QA-009.7 product details smoke test
+
+`ProductSearchTest` covers `TC-CAT-006` using `TD-CAT-001`. It selects `Apple iPhone 16 128GB` from the local search results and compares the destination URL and title with the selected listing. It verifies the local fixture's `$799.00` price, `In stock` status, and enabled Add to cart button. The sample iPhone has no configurable purchase options. If the local catalog changes, recheck this fixture and its expected price and stock before updating the test.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ProductSearchTest#selectingProductOpensMatchingPurchasableDetails" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+Use `"-Dtest=ProductSearchTest"` to run both catalog cases.
+
+On 2026-11-10, the independent run passed one test and the full suite passed eleven tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips. The [manual screenshot](../docs/test-execution/evidence/Product/TC-CAT-006_20261109_01.png) records the earlier public demo observation for `EXE-CAT-006`.
 
 ## Source layout
 
