@@ -12,7 +12,9 @@
 | Defect management setup | QA-007.1 Prepare defect management artifacts | Complete | [Bug tracking workbook](bug-reports/Bug_Tracking.xlsx), [lifecycle and severity guidelines](bug-reports/DEFECT_MANAGEMENT.md), [report template](bug-reports/BUG_REPORT_TEMPLATE.md), and [Jira reporting guide](bug-reports/BUG_REPORTING_GUIDE.md) |
 | Defect management | QA-007.2 Triage, report, and retest defects | Open | Evidence-backed defect records and retest or regression results when applicable |
 | Automation foundation | QA-008 Set up the Maven automation project | Complete | [Maven module](../automation/pom.xml) and [automation guide](../automation/README.md) |
-| UI automation | QA-009 Automate priority smoke scenarios | Planned | A runnable smoke suite and generated test reports |
+| UI automation | QA-009 Automate priority smoke scenarios | In progress | A runnable smoke suite and generated test reports |
+| UI automation | QA-009.1 First real browser smoke test | Complete on local nopCommerce. Public demo blocked. | [Independent TC-CAT-001 run](../automation/README.md#qa-0091-product-search) and [local QA environment](../automation/README.md#local-nopcommerce-qa-environment) |
+| UI automation | QA-009.2 Automate login and logout smoke scenarios | Complete on local nopCommerce | [TC-AUTH-001 and TC-AUTH-004 runs](../automation/README.md#qa-0092-authentication-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
@@ -60,3 +62,15 @@
 
 - The Maven module compiles for Java 17 and uses Selenium WebDriver and TestNG. It supports Chrome and Edge, configurable storefront URL and headless mode, and per-method WebDriver setup and teardown.
 - On 2026-11-09, `mvn -f automation/pom.xml test` passed all three browser-free configuration tests on Windows with JDK 21.0.4 and Maven 3.9.9. Browser startup and storefront behavior remain for QA-009.
+
+## QA-009.1 verification outcome
+
+- On 2026-11-10, the independent configuration run passed all three tests. The independent live smoke run launched Chrome 156.0.8078.80 headless on Windows 11 and recorded one failure when the demo displayed `Just a moment...` instead of the storefront. Both runs reported zero errors and zero skips.
+- The full suite against a temporary localhost fixture ran four tests with zero failures, errors, or skips. An intentional wrong-product override on the same fixture ran one test with one assertion failure, zero errors, and zero skips. TestNG reported successful browser teardown for both fixture runs and the live run.
+- The smoke test is linked to `TC-CAT-001`, `TD-CAT-001`, and `EXE-CAT-001`.
+- On 2026-11-10, the installed nopCommerce 4.90.7 QA storefront returned the expected iPhone from its PostgreSQL sample catalog after a container restart. Chrome headless passed the independent smoke test and the full Maven suite. The runs reported one and four tests respectively, with zero failures, errors, or skips. The public demo result remains blocked.
+
+## QA-009.2 verification outcome
+
+- On 2026-11-10, `TC-AUTH-001` opened the expected shopper account after sign-in. `TC-AUTH-004` restored guest navigation and redirected a fresh visit to the previous account URL to sign-in, with no account content displayed.
+- Each case ran independently with its own shopper fixture and browser session. The full suite on local nopCommerce 4.90.7 passed six tests with zero failures, errors, or skips.

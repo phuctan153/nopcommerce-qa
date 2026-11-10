@@ -34,4 +34,8 @@ public final class HomePage {
         wait.until(ExpectedConditions.elementToBeClickable(SEARCH_BUTTON)).click();
         return new SearchResultsPage(driver);
     }
+
+    public StorefrontHeader header() {
+        return new StorefrontHeader(driver);
+    }
 }
