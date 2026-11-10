@@ -22,8 +22,8 @@
 | UI automation | QA-009.7 Automate product details smoke scenario | Complete on local nopCommerce | [Independent TC-CAT-006 run](../automation/README.md#qa-0097-product-details-smoke-test) |
 | UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
-| Continuous integration | QA-010 Add GitHub Actions | Implemented and verified locally. Hosted run pending. | [Smoke workflow and report instructions](../automation/README.md#run-in-github-actions) |
-| Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
+| Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
+| Portfolio review | QA-011 Prepare the project for review | README reviewed | [Portfolio overview](../README.md), traceable evidence, and repeatable run instructions |
 
 ## QA-002 verification remaining
 
@@ -122,4 +122,5 @@
 
 - The workflow provisions a fresh nopCommerce and PostgreSQL instance, installs sample data, creates the two shopper fixtures, and runs Maven with headless Chrome. The upload step collects Surefire reports after success or failure when reports exist.
 - On 2026-11-10, a fresh disposable environment passed all fourteen tests on Windows 11 with JDK 21 and headless Chrome. Both authentication cases passed. The Compose project and volumes were removed after the run.
-- `actionlint` passed for the workflow. A simulated skipped test was rejected, and a simulated Maven failure retained its failure status while removing the fixture password from the report. The first hosted run must confirm Ubuntu runner execution and artifact availability.
+- `actionlint` passed for the workflow. A simulated skipped test was rejected, and a simulated Maven failure retained its failure status while removing the fixture password from the report.
+- On 2026-11-10, the first hosted run completed successfully on Ubuntu with JDK 17. GitHub recorded success for the smoke and upload steps and listed the `storefront-smoke-reports` artifact. [Hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311)

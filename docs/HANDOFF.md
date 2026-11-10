@@ -28,8 +28,8 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-009.8 | Complete on local nopCommerce. Search with no results passed in the three-case search and details run. |
 | QA-009.9 | Complete on local nopCommerce. Both category navigation cases passed. |
 | QA-009 | All eleven workbook automation candidates are covered. The full suite passed all fourteen tests. |
-| QA-010 | GitHub Actions workflow implemented. A fresh local run passed all fourteen tests. Hosted verification is pending. |
-| QA-011 | Portfolio review is planned. |
+| QA-010 | The local run passed all fourteen tests. The first hosted run succeeded and published the Surefire artifact. |
+| QA-011 | The repository README was reviewed for portfolio use. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
 
@@ -58,6 +58,6 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 
 ## Next session
 
-1. Verify QA-010 on GitHub once the workflow is pushed. Confirm the Ubuntu job runs all fourteen tests without skips, including both authentication cases, and download the Surefire artifact.
-2. Record the hosted run URL and artifact result before closing QA-010. Then begin QA-011 portfolio review.
+1. Use the [portfolio README](../README.md) as the entry point for the project results, test evidence, and run instructions.
+2. The [first hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) succeeded on 2026-11-10. The GitHub API confirmed the `storefront-smoke-reports` artifact listing. The artifact contents still need a download check if required for the portfolio review.
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.

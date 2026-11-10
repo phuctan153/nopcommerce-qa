@@ -1,37 +1,28 @@
 # nopCommerce QA Testing Portfolio
 
-This portfolio documents manual testing and UI automation for a sample e-commerce storefront. It includes test design, manual execution records, and a Maven smoke suite for shopper authentication, catalog navigation and search, and shopping cart behavior.
+A QA portfolio for nopCommerce covering risk-based test planning, manual execution, requirements traceability, and automated storefront smoke tests. The automated suite uses a disposable Docker environment with sample data. [Public demo used for manual testing](https://demo.nopcommerce.com/)
 
-The application under test is the [nopCommerce public demo storefront](https://demo.nopcommerce.com/).
+## Results
 
-## Testing objectives
+- **Manual testing.** Recorded outcomes for 38 test cases across registration, authentication, product catalog, shopping cart, and checkout. The execution workbook reports 28 Pass, 3 Fail, 5 Blocked, and 2 Skipped. [Execution workbook](docs/test-execution/Test_Execution.xlsx)
+- **UI automation.** Implemented 11 Selenium browser cases and 3 configuration checks using Java, TestNG, Maven, and the Page Object Model. The full suite passed **14/14** on local nopCommerce 4.90.7 with Chrome headless. [Automation guide](automation/README.md)
+- **Continuous integration.** GitHub Actions provisions nopCommerce and PostgreSQL, creates disposable shopper accounts, runs the smoke suite, and uploads Surefire reports. The first hosted run passed and published the report artifact. [Successful GitHub Actions run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311)
 
-- Verify that shoppers can complete core storefront journeys.
-- Document repeatable manual checks, observed outcomes, and reproducible defects.
-- Automate stable smoke and regression scenarios with clear failure reporting.
+The browser suite covers sign-in and sign-out, catalog search and navigation, product details, and cart add, update, removal, and subtotal behavior. The manual checkout scope ends at the pre-submit review.
 
-## Planned scope
+## Review the portfolio
 
-Manual coverage includes registration and sign-in, catalog browsing and search, product details, and cart updates. Checkout coverage stops at the last safe pre-submit step available in the demo.
-
-## Technology stack
-
-Manual QA planning uses Markdown. Scenarios, detailed test cases, synthetic data rules, and traceability use Excel. The automation module uses Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. The GitHub Actions workflow provisions the test storefront and runs the smoke suite.
+| Artifact | What it shows |
+| --- | --- |
+| [Test plan](docs/manual/TEST_PLAN.md) and [risk assessment](docs/manual/RISK_ASSESSMENT.md) | Scope, priorities, and test approach |
+| [Test scenarios](docs/test-cases/Test_Scenarios.xlsx), [test cases](docs/test-cases/Test_Cases.xlsx), and [test data](docs/test-cases/Test_Data.xlsx) | Preconditions, steps, expected results, and synthetic data |
+| [Requirements traceability matrix](docs/test-cases/RTM.xlsx) | Links between requirements, scenarios, and cases |
+| [Sample cart evidence](docs/test-execution/evidence/Cart/TC-CART-007_20261109_01.png) | Manual subtotal reconciliation for `TC-CART-007` |
+| [Selenium tests](automation/src/test/java/com/nopcommerce/qa/tests) and [Page Objects](automation/src/test/java/com/nopcommerce/qa/pages) | Test assertions, browser interactions, and explicit waits |
+| [GitHub Actions workflow](.github/workflows/smoke.yml) and [CI script](automation/ci/run-smoke.py) | Runner setup, storefront provisioning, and report upload |
 
 ## Run the smoke suite
 
-Install JDK 17 or later, Maven 3.9 or later, Docker Desktop, and Chrome or Microsoft Edge. The suite includes 11 browser cases and three browser-free configuration checks. Follow the [local run instructions](automation/README.md#run-the-full-suite-locally) to start nopCommerce, load the shopper fixtures, run the tests, and open the report.
+Use JDK 17 or later, Maven 3.9 or later, Docker, and Chrome or Microsoft Edge. Follow the local instructions to start nopCommerce, load the shopper fixtures, and view the Surefire report. [Local run instructions](automation/README.md#run-the-full-suite-locally)
 
-See the [GitHub Actions run instructions](automation/README.md#run-in-github-actions) to reproduce the CI setup or download its reports.
-
-## Project status
-
-All 38 designed cases have a recorded manual disposition. Evidence gaps and conditional cases are tracked separately from the recorded outcomes. See the [task tracker](docs/TASKS.md) for the project sequence and the [handoff](docs/HANDOFF.md) for the current checkpoint.
-
-| Workbook | Contents |
-| --- | --- |
-| [Test scenarios](docs/test-cases/Test_Scenarios.xlsx) | QA-004 coverage, priorities, and scenario IDs |
-| [Test cases](docs/test-cases/Test_Cases.xlsx) | Numbered steps, preconditions, expected results, and data references |
-| [Test data](docs/test-cases/Test_Data.xlsx) | Reusable synthetic inputs and per-run fixture rules |
-| [Requirements traceability](docs/test-cases/RTM.xlsx) | Functional ID to scenario to test case mappings, plus verification gaps and exclusions |
-| [Manual execution](docs/test-execution/Test_Execution.xlsx) | Recorded outcomes and evidence references |
+For a CI run, open the workflow summary and download `storefront-smoke-reports` under **Artifacts** while it is available. Open `index.html` after extracting it. [GitHub Actions run instructions](automation/README.md#run-in-github-actions)
