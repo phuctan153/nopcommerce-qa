@@ -28,7 +28,8 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-009.8 | Complete on local nopCommerce. Search with no results passed in the three-case search and details run. |
 | QA-009.9 | Complete on local nopCommerce. Both category navigation cases passed. |
 | QA-009 | All eleven workbook automation candidates are covered. The full suite passed all fourteen tests. |
-| QA-010 and QA-011 | GitHub Actions and portfolio review are planned. |
+| QA-010 | GitHub Actions workflow implemented. A fresh local run passed all fourteen tests. Hosted verification is pending. |
+| QA-011 | Portfolio review is planned. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
 
@@ -53,9 +54,10 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, [the product details smoke test](../automation/README.md#qa-0097-product-details-smoke-test) verified the selected listing's title and URL, price, stock status, and enabled Add to cart button. The independent run passed one test and the full run passed eleven with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
 - On 2026-11-10, [the no-results smoke test](../automation/README.md#qa-0098-search-with-no-results) verified that a nonmatching query showed the empty results message and zero product titles. All three search and details tests passed on local nopCommerce 4.90.7 with headless Chrome.
 - On 2026-11-10, [the category navigation smoke tests](../automation/README.md#qa-0099-category-navigation-smoke-tests) verified the Electronics landing page and the Cell phones heading, breadcrumb, and product listing. The focused run passed both category tests. The full suite passed all fourteen tests with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
+- On 2026-11-10, [the CI reproduction script](../automation/README.md#run-in-github-actions) installed nopCommerce and provisioned two fresh shopper accounts in a disposable Compose project. Maven passed all fourteen tests with zero failures, errors, and skips on Windows 11 with JDK 21 and headless Chrome. The workflow passed `actionlint`.
 
 ## Next session
 
-1. Start QA-010 by adding GitHub Actions support for the [full smoke suite](../automation/README.md#run-the-full-suite-locally). Provision the storefront and shopper fixtures for CI and upload the Surefire reports for inspection.
-2. Use the local fourteen-test run as the CI baseline. Compare the executed cases and check for skips, including both authentication cases.
+1. Verify QA-010 on GitHub once the workflow is pushed. Confirm the Ubuntu job runs all fourteen tests without skips, including both authentication cases, and download the Surefire artifact.
+2. Record the hosted run URL and artifact result before closing QA-010. Then begin QA-011 portfolio review.
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.

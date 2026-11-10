@@ -40,6 +40,22 @@ Maven Surefire discovers TestNG classes named `*Test.java`. The full suite conta
 
 Check the Maven summary for fourteen tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
 
+### Run in GitHub Actions
+
+The [Storefront smoke suite workflow](../.github/workflows/smoke.yml) runs on pushes to `main`, pull requests targeting `main`, and manual runs. It uses Ubuntu 24.04, Temurin JDK 17, Docker Compose, and headless Chrome.
+
+Each run starts a fresh nopCommerce 4.90.7 and PostgreSQL instance, installs the sample catalog, and creates separate shopper accounts for login and logout. The script generates disposable passwords for that run. The job fails if Maven fails or TestNG reports skips or fewer than fourteen tests. The script removes its Compose project and volumes at the end.
+
+Open the workflow run in the repository's **Actions** tab. Download **storefront-smoke-reports** from **Artifacts** and open `index.html`. The upload step runs after a failure and keeps any reports Maven produced for 14 days. If setup failed before Maven, inspect the provisioning step's log.
+
+To reproduce the job from the repository root, start Docker and use Python 3 with Maven, Java, and Chrome on the machine.
+
+```powershell
+python automation/ci/run-smoke.py
+```
+
+The script uses port `18080` by default. Set `NOP_QA_CI_PORT` before running if that port is in use. The disposable Compose project uses its own volumes and credentials. Maven runs `clean test` and writes fresh Surefire reports to `automation/target/surefire-reports/`.
+
 ### Run selected checks
 
 Run the configuration checks without opening a browser:

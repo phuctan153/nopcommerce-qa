@@ -22,7 +22,7 @@
 | UI automation | QA-009.7 Automate product details smoke scenario | Complete on local nopCommerce | [Independent TC-CAT-006 run](../automation/README.md#qa-0097-product-details-smoke-test) |
 | UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
-| Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
+| Continuous integration | QA-010 Add GitHub Actions | Implemented and verified locally. Hosted run pending. | [Smoke workflow and report instructions](../automation/README.md#run-in-github-actions) |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
 ## QA-002 verification remaining
@@ -117,3 +117,9 @@
 - On 2026-11-10, `TC-CAT-004` opened Electronics from the storefront menu and verified its heading and subcategories. `TC-CAT-005` opened Cell phones from the parent category and verified the child heading, breadcrumb, and sample iPhone listing. Both used `TD-CAT-004`.
 - Both category cases and all fourteen tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
 - All eleven cases marked for automation in the current case workbook map to distinct browser tests. QA-010 is the next phase for running the suite and publishing its reports through GitHub Actions.
+
+## QA-010 verification outcome
+
+- The workflow provisions a fresh nopCommerce and PostgreSQL instance, installs sample data, creates the two shopper fixtures, and runs Maven with headless Chrome. The upload step collects Surefire reports after success or failure when reports exist.
+- On 2026-11-10, a fresh disposable environment passed all fourteen tests on Windows 11 with JDK 21 and headless Chrome. Both authentication cases passed. The Compose project and volumes were removed after the run.
+- `actionlint` passed for the workflow. A simulated skipped test was rejected, and a simulated Maven failure retained its failure status while removing the fixture password from the report. The first hosted run must confirm Ubuntu runner execution and artifact availability.

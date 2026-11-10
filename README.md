@@ -16,11 +16,13 @@ Manual coverage includes registration and sign-in, catalog browsing and search, 
 
 ## Technology stack
 
-Manual QA planning uses Markdown. Scenarios, detailed test cases, synthetic data rules, and traceability use Excel. The automation module uses Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. GitHub Actions is planned for a later phase.
+Manual QA planning uses Markdown. Scenarios, detailed test cases, synthetic data rules, and traceability use Excel. The automation module uses Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. The GitHub Actions workflow provisions the test storefront and runs the smoke suite.
 
 ## Run the smoke suite
 
 Install JDK 17 or later, Maven 3.9 or later, Docker Desktop, and Chrome or Microsoft Edge. The suite includes 11 browser cases and three browser-free configuration checks. Follow the [local run instructions](automation/README.md#run-the-full-suite-locally) to start nopCommerce, load the shopper fixtures, run the tests, and open the report.
+
+See the [GitHub Actions run instructions](automation/README.md#run-in-github-actions) to reproduce the CI setup or download its reports.
 
 ## Project status
 

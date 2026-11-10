@@ -1,0 +1,41 @@
+name: Storefront smoke suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: automation/pom.xml
+
+      - name: Provision the storefront and run smoke tests
+        run: python3 automation/ci/run-smoke.py
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: storefront-smoke-reports
+          path: automation/target/surefire-reports/
+          if-no-files-found: warn
+          retention-days: 14
