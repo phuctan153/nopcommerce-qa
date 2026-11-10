@@ -17,6 +17,8 @@ public final class ShoppingCartPage {
     private static final By QUANTITY = By.cssSelector("input.qty-input");
     private static final By UNIT_PRICE = By.cssSelector(".product-unit-price");
     private static final By LINE_TOTAL = By.cssSelector(".product-subtotal");
+    private static final By REMOVE = By.cssSelector("button.remove-btn[name='updatecart']");
+    private static final By EMPTY_CART = By.cssSelector(".shopping-cart-page .order-summary-content .no-data");
 
     private final WebDriverWait wait;
 
@@ -35,10 +37,7 @@ public final class ShoppingCartPage {
     }
 
     public void updateQuantity(String productName, int quantity) {
-        WebElement row = visibleRows().stream()
-                .filter(item -> item.findElement(PRODUCT_NAME).getText().equals(productName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No cart line found for " + productName));
+        WebElement row = rowFor(productName);
         WebElement quantityField = row.findElement(QUANTITY);
         wait.withMessage("The cart quantity field was not editable.")
                 .until(ExpectedConditions.elementToBeClickable(quantityField));
@@ -46,6 +45,26 @@ public final class ShoppingCartPage {
         quantityField.sendKeys(Keys.chord(Keys.CONTROL, "a"), Integer.toString(quantity), Keys.TAB);
         wait.withMessage("Updating the quantity did not reload the cart.")
                 .until(ExpectedConditions.stalenessOf(row));
+    }
+
+    public void removeProduct(String productName) {
+        WebElement row = rowFor(productName);
+        wait.withMessage("The remove button was not clickable for " + productName)
+                .until(ExpectedConditions.elementToBeClickable(row.findElement(REMOVE))).click();
+        wait.withMessage("Removing " + productName + " did not reload the cart.")
+                .until(ExpectedConditions.stalenessOf(row));
+    }
+
+    public String emptyCartMessage() {
+        return wait.withMessage("The empty cart message did not become visible.")
+                .until(ExpectedConditions.visibilityOfElementLocated(EMPTY_CART)).getText();
+    }
+
+    private WebElement rowFor(String productName) {
+        return visibleRows().stream()
+                .filter(item -> item.findElement(PRODUCT_NAME).getText().equals(productName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No cart line found for " + productName));
     }
 
     private List<WebElement> visibleRows() {

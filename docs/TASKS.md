@@ -17,6 +17,7 @@
 | UI automation | QA-009.2 Automate login and logout smoke scenarios | Complete on local nopCommerce | [TC-AUTH-001 and TC-AUTH-004 runs](../automation/README.md#qa-0092-authentication-smoke-tests) |
 | UI automation | QA-009.3 Automate add-to-cart smoke scenario | Complete on local nopCommerce | [Independent TC-CART-001 run](../automation/README.md#qa-0093-add-to-cart-smoke-test) |
 | UI automation | QA-009.4 Automate cart quantity update smoke scenario | Complete on local nopCommerce | [Independent TC-CART-003 run](../automation/README.md#qa-0094-cart-quantity-update-smoke-test) |
+| UI automation | QA-009.5 Automate cart removal smoke scenario | Complete on local nopCommerce | [Independent TC-CART-006 run](../automation/README.md#qa-0095-cart-removal-smoke-test) |
 | Continuous integration | QA-010 Add GitHub Actions | Planned | Automated test execution and report artifact upload |
 | Portfolio review | QA-011 Prepare the project for review | Planned | Verified documentation, traceable evidence, and repeatable run instructions |
 
@@ -86,3 +87,8 @@
 
 - On 2026-11-10, `TC-CART-003` used `TD-CART-001` to change one `HTC smartphone` to two in a fresh guest cart. The reopened cart retained quantity two, and its line total matched the displayed unit price multiplied by two. The [manual execution workbook](test-execution/Test_Execution.xlsx) records the related `EXE-CART-003` run.
 - Local nopCommerce 4.90.7 at `http://127.0.0.1:8080/` passed the independent test and all eight tests in the full Maven suite with headless Chrome 156.0.8078.80 on Windows 11. Both runs reported zero failures, errors, and skips.
+
+## QA-009.5 verification outcome
+
+- On 2026-11-10, `TC-CART-006` used `TD-CART-004` to add two distinct lines in a fresh guest cart. Removing the first product preserved the second line. Removing the second displayed the empty cart message and left no product lines.
+- The independent test and all nine tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips. The [full suite instructions](../automation/README.md#run-the-full-suite-locally) include fixture loading and the command to watch the browser run.

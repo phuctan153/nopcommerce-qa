@@ -4,13 +4,42 @@ Use JDK 17 or later and Maven 3.9 or later. Install Chrome or Microsoft Edge whe
 
 ## Run
 
-From the repository root:
+### Run the full suite locally
+
+Start Docker Desktop with the Linux engine and open PowerShell at the repository root. For a first run, complete the [local storefront setup](#local-nopcommerce-qa-environment) and create the two [shopper fixtures](#qa-0092-authentication-smoke-tests). Store their values in the Git-ignored `automation/.env`.
 
 ```powershell
-mvn -f automation/pom.xml test
+docker compose --env-file automation/.env -f automation/compose.qa.yaml up -d --wait
+if ($LASTEXITCODE -ne 0) { throw 'The QA storefront failed to start.' }
+
+$fixtures = @{}
+foreach ($line in Get-Content -LiteralPath automation/.env) {
+    if ($line -match '^(NOP_QA_(?:LOGIN|LOGOUT)_(?:EMAIL|PASSWORD))=(.+)$') {
+        $fixtures[$Matches[1]] = $Matches[2]
+    }
+}
+foreach ($name in 'NOP_QA_LOGIN_EMAIL', 'NOP_QA_LOGIN_PASSWORD', 'NOP_QA_LOGOUT_EMAIL', 'NOP_QA_LOGOUT_PASSWORD') {
+    if (-not $fixtures[$name]) { throw "Missing $name in automation/.env" }
+    [Environment]::SetEnvironmentVariable($name, $fixtures[$name], 'Process')
+}
+
+mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=false" test
 ```
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full run includes the configuration, search, authentication, and shopping cart tests. Authentication requires the local storefront and shopper fixtures described below. Find the test counts, failures, and stack traces in `automation/target/surefire-reports/`.
+Use `"-Dheadless=true"` to run with the browser window hidden. Each UI test opens and closes its own browser session.
+
+Maven Surefire discovers TestNG classes named `*Test.java`. The full suite contains three configuration checks and six automated browser cases:
+
+| Test class | Coverage |
+| --- | --- |
+| `TestConfigTest` | Default settings, overrides, and invalid headless flag |
+| `ProductSearchTest` | `TC-CAT-001` product search |
+| `AuthenticationSmokeTest` | `TC-AUTH-001` login and `TC-AUTH-004` logout |
+| `ShoppingCartSmokeTest` | `TC-CART-001` add, `TC-CART-003` update quantity, and `TC-CART-006` remove |
+
+Check the Maven summary for nine tests with zero failures, errors, or skips. Open `automation/target/surefire-reports/index.html` for per-test results or inspect `testng-results.xml` in that directory. For manual browser cases in the workbook, follow the [manual execution guide](../docs/test-execution/EXECUTION_GUIDE.md).
+
+### Run selected checks
 
 Run the configuration checks without opening a browser:
 
@@ -21,14 +50,14 @@ mvn -f automation/pom.xml "-Dtest=TestConfigTest" test
 Run the search smoke test independently:
 
 ```powershell
-mvn -f automation/pom.xml "-Dtest=ProductSearchTest" "-Dheadless=true" test
+mvn -f automation/pom.xml "-Dtest=ProductSearchTest" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
 If Maven reports a `PKIX path building failed` error on Windows and the required certificate is trusted by Windows, run Maven with the Windows root store in a temporary PowerShell session:
 
 ```powershell
 $env:MAVEN_OPTS = "$env:MAVEN_OPTS -Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE"
-mvn -f automation/pom.xml test
+mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
 
 ## Browser configuration
@@ -139,15 +168,21 @@ In a fresh guest session, the test adds one `HTC smartphone` and checks its init
 mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#updatedQuantityAndLineTotalPersistWhenCartIsReopened" "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=true" test
 ```
 
-Use `"-Dtest=ShoppingCartSmokeTest"` to run both cart cases. For the full local suite, first load the shopper variables from [authentication setup](#qa-0092-authentication-smoke-tests), then run:
-
-```powershell
-mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dbrowser=chrome" "-Dheadless=true" test
-```
-
 For a fixture override, use a product that supports quantities one and two with an editable quantity field and USD prices where the displayed unit price times the quantity equals the line total.
 
 On 2026-11-10, the independent run passed one test and the full suite passed eight tests on local nopCommerce 4.90.7 with headless Chrome 156.0.8078.80 on Windows 11. Both runs reported zero failures, errors, and skips. The full run included both authentication cases with the local shopper fixtures.
+
+## QA-009.5 cart removal smoke test
+
+`ShoppingCartSmokeTest` covers `TC-CART-006` using `TD-CART-004`. The test adds one `HTC smartphone` and one `Apple iPhone 16 128GB` to a fresh guest cart. It removes the HTC and verifies that the iPhone line retains its product name, quantity, unit price, and line total. It then removes the iPhone and verifies the empty cart message and absence of product lines. The removal case uses these two sample products independently of the fixture overrides for the other cart cases.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest#removingProductsPreservesTheOtherLineUntilCartIsEmpty" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+Use `"-Dtest=ShoppingCartSmokeTest"` to run all three cart cases.
+
+On 2026-11-10, the independent run passed one test and the full suite passed nine tests on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
 
 ## Source layout
 

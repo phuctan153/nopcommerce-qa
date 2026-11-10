@@ -6,6 +6,7 @@ import com.nopcommerce.qa.pages.ShoppingCartPage.CartLine;
 import com.nopcommerce.qa.support.BaseTest;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -40,8 +41,37 @@ public class ShoppingCartSmokeTest extends BaseTest {
         assertLineTotal(updatedLine);
     }
 
+    @Test(groups = "smoke", description = "TC-CART-006: Remove a selected line and then empty the cart")
+    public void removingProductsPreservesTheOtherLineUntilCartIsEmpty() {
+        String firstProduct = DEFAULT_PRODUCT;
+        String secondProduct = "Apple iPhone 16 128GB";
+        addProductToCart(firstProduct, firstProduct, 1);
+        ShoppingCartPage cart = addProductToCart("iphone", secondProduct, 1);
+
+        List<CartLine> initialLines = cart.visibleLines();
+        assertEquals(initialLines.size(), 2, "Expected two distinct cart lines: " + initialLines);
+        assertEquals(Set.copyOf(initialLines.stream().map(CartLine::productName).toList()),
+                Set.of(firstProduct, secondProduct), "Unexpected products in the cart.");
+        CartLine remainingLine = initialLines.stream()
+                .filter(line -> line.productName().equals(secondProduct))
+                .findFirst()
+                .orElseThrow();
+
+        cart.removeProduct(firstProduct);
+        assertEquals(cart.visibleLines(), List.of(remainingLine),
+                "Removing the first product should leave the other cart line unchanged.");
+
+        cart.removeProduct(secondProduct);
+        assertEquals(cart.emptyCartMessage(), "Your Shopping Cart is empty!",
+                "Removing the last product should display the empty cart message.");
+        assertEquals(cart.visibleLines(), List.of(), "Expected no product lines in the empty cart.");
+    }
+
     private ShoppingCartPage addProductToCart(String productName, int quantity) {
-        String query = System.getProperty("cartSearchQuery", DEFAULT_PRODUCT);
+        return addProductToCart(System.getProperty("cartSearchQuery", DEFAULT_PRODUCT), productName, quantity);
+    }
+
+    private ShoppingCartPage addProductToCart(String query, String productName, int quantity) {
         return new HomePage(driver()).open(config().baseUrl())
                 .searchFor(query)
                 .openProduct(productName)
