@@ -20,6 +20,7 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-008 | Complete. The Maven module, WebDriver lifecycle, and first page object compile. All three browser-free configuration tests pass. |
 | QA-009.1 | Complete on installed nopCommerce 4.90.7. The public demo run remains blocked by its verification page. |
 | QA-009.2 | Complete on local nopCommerce. Login and logout passed independently and in the six-test suite. |
+| QA-009.3 | Complete on local nopCommerce. Add-to-cart passed independently and in the seven-test suite. |
 | Remaining QA-009, QA-010, and QA-011 | Additional smoke tests, GitHub Actions, and portfolio review are planned. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
@@ -38,9 +39,10 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, `ProductSearchTest` launched Chrome 156.0.8078.80 headless. The public demo returned `Just a moment...` and the test failed before submitting a search. The full suite passed all four tests against a temporary localhost fixture, and a wrong-product override failed as expected. TestNG recorded successful teardown after the failed runs. See the [automation guide](../automation/README.md#qa-0091-product-search) for the case, fixture settings, and run commands.
 - The real [local QA instance](../automation/README.md#local-nopcommerce-qa-environment) runs on `http://127.0.0.1:8080/` using Docker Compose and PostgreSQL. The sample search result persisted after restart. Chrome headless passed the independent search test and all four tests in the full suite. Local admin credentials are in the ignored `automation/.env`. The admin account is for setup.
 - Two separate shopper fixtures are provisioned for [authentication smoke tests](../automation/README.md#qa-0092-authentication-smoke-tests). Their credentials are in the ignored `automation/.env`. On 2026-11-10, Chrome headless passed each authentication case independently and all six tests in the full suite.
+- On 2026-11-10, [the add-to-cart smoke test](../automation/README.md#qa-0093-add-to-cart-smoke-test) verified one `HTC smartphone` cart line with quantity two. The independent run and the full seven-test suite passed on local nopCommerce with headless Chrome.
 
 ## Next session
 
 1. Start Docker Desktop and resume the local QA instance if needed. Load the shopper fixture variables and run the current smoke tests before expanding QA-009.
-2. Review the next priority shopping cart candidate using the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), [traceability matrix](test-cases/RTM.xlsx), and manual execution evidence. Keep scenarios independent and stop checkout at the last safe pre-submit step.
+2. Review `TC-CART-003` for the next shopping cart smoke test. Use the [case workbook](test-cases/Test_Cases.xlsx), [test data workbook](test-cases/Test_Data.xlsx), [traceability matrix](test-cases/RTM.xlsx), and manual execution evidence. Keep scenarios independent and stop checkout at the last safe pre-submit step.
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.

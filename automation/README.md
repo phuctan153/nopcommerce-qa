@@ -10,7 +10,7 @@ From the repository root:
 mvn -f automation/pom.xml test
 ```
 
-Maven Surefire discovers TestNG classes named `*Test.java`. The full run includes the configuration checks, browser search, and authentication smoke tests. Authentication requires the local storefront and shopper fixtures described below. Find the test counts, failures, and stack traces in `automation/target/surefire-reports/`.
+Maven Surefire discovers TestNG classes named `*Test.java`. The full run includes the configuration, search, authentication, and shopping cart tests. Authentication requires the local storefront and shopper fixtures described below. Find the test counts, failures, and stack traces in `automation/target/surefire-reports/`.
 
 Run the configuration checks without opening a browser:
 
@@ -116,6 +116,18 @@ mvn -f automation/pom.xml "-Dtest=AuthenticationSmokeTest" "-DbaseUrl=http://127
 Omit `-Dtest` to run the full suite with those fixtures. Authentication reports a skip when its fixture variables are missing or `baseUrl` does not use `127.0.0.1` or `localhost`. A configured fixture that fails to sign in produces a test failure.
 
 On 2026-11-10, each authentication test passed independently on local nopCommerce 4.90.7 with Chrome 156.0.8078.80 headless on Windows 11. The full suite passed six tests with zero failures, errors, or skips.
+
+## QA-009.3 add-to-cart smoke test
+
+`ShoppingCartSmokeTest` covers `TC-CART-001` using `TD-CART-001` in a fresh guest session. The local sample fixture is `HTC smartphone`, a purchasable product with no required options. The test opens its details page, adds two units, and checks that the cart contains one line for that product with quantity two. It does not enter checkout.
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=ShoppingCartSmokeTest" "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
+```
+
+To use another catalog fixture, override `cartSearchQuery` and `cartProduct` together. Use a published product with no required options that supports quantity two.
+
+On 2026-11-10, the independent cart test and all seven tests in the full suite passed on local nopCommerce 4.90.7 with headless Chrome on Windows 11. Both runs reported zero failures, errors, and skips.
 
 ## Source layout
 
