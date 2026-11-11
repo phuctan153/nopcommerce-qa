@@ -24,7 +24,7 @@
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
 | Portfolio review | QA-011 Prepare the project for review | README reviewed | [Portfolio overview](../README.md), traceable evidence, and repeatable run instructions |
-| Report presentation | QA-011.1 Publish a live smoke report dashboard | Implementation verified locally. Pages deployment pending. | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
+| Report presentation | QA-011.1 Publish a live smoke report dashboard | Published on GitHub Pages | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
 
 ## QA-002 verification remaining
 
@@ -125,3 +125,10 @@
 - On 2026-11-10, a fresh disposable environment passed all fourteen tests on Windows 11 with JDK 21 and headless Chrome. Both authentication cases passed. The Compose project and volumes were removed after the run.
 - `actionlint` passed for the workflow. A simulated skipped test was rejected, and a simulated Maven failure retained its failure status while removing the fixture password from the report.
 - On 2026-11-10, the first hosted run completed successfully on Ubuntu with JDK 17. GitHub recorded success for the smoke and upload steps and listed the `storefront-smoke-reports` artifact. [Hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311)
+
+## QA-011.1 live report dashboard
+
+- On 2026-11-11, the dashboard was published through GitHub Pages. The workflow exports selected TestNG fields after the smoke step and deploys reports from the main branch, including failed runs.
+- Verification checked JavaScript syntax, status and module filters, case search, and missing-report and failure states in a DOM test harness. The public JSON exporter excluded parameters and exceptions in a synthetic failure report. Desktop browser preview was unavailable because the Computer Use helper could not confirm the browser URL, so visual browser verification remains open.
+- The first dashboard deployment correctly displayed thirteen passes and one failure. Investigation found that the sign-in test read navigation state before the sign-in flow had completed. An explicit wait for the sign-out link was added, and the local suite passed fourteen tests with zero failures, errors, or skips.
+- The next hosted run passed all fourteen tests and deployed the dashboard. Public HTTP checks confirmed that the HTML, CSS, JavaScript, and JSON were available, and that the JSON contained the matching commit with fourteen passes and zero failures or skips. [Verified deployment run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42975459235)
