@@ -30,6 +30,7 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-009 | All eleven workbook automation candidates are covered. The full suite passed all fourteen tests. |
 | QA-010 | The local run passed all fourteen tests. The first hosted run succeeded and published the Surefire artifact. |
 | QA-011 | The repository README was reviewed for portfolio use. |
+| QA-011.1 | The live dashboard is implemented and its public data export is verified locally. Pages deployment is pending. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
 
@@ -59,5 +60,6 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 ## Next session
 
 1. Use the [portfolio README](../README.md) as the entry point for the project results, test evidence, and run instructions.
+   The [live dashboard](https://phuctan153.github.io/nopcommerce-qa/) presents the latest main-branch smoke report.
 2. The [first hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) succeeded on 2026-11-10. The GitHub API confirmed the `storefront-smoke-reports` artifact listing. The artifact contents still need a download check if required for the portfolio review.
 3. Refresh this handoff and the task tracker when the next task changes the project state. Commit or push only on explicit request. If Git for Windows encounters a certificate trust error, previous pushes succeeded with the per-command option `-c http.sslBackend=schannel`.

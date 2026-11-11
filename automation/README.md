@@ -42,6 +42,8 @@ Check the Maven summary for fourteen tests with zero failures, errors, or skips.
 
 ### Run in GitHub Actions
 
+Open the [live report dashboard](https://phuctan153.github.io/nopcommerce-qa/) to view the latest published main-branch run. It includes per-module totals, case results, durations, and filters. The page links to the workflow run that produced the data.
+
 The [Storefront smoke suite workflow](../.github/workflows/smoke.yml) runs on pushes to `main`, pull requests targeting `main`, and manual runs. It uses Ubuntu 24.04, Temurin JDK 17, Docker Compose, and headless Chrome.
 
 Each run starts a fresh nopCommerce 4.90.7 and PostgreSQL instance, installs the sample catalog, and creates separate shopper accounts for login and logout. The script generates disposable passwords for that run. The job fails if Maven fails or TestNG reports skips or fewer than fourteen tests. The script removes its Compose project and volumes at the end.
@@ -55,6 +57,15 @@ python automation/ci/run-smoke.py
 ```
 
 The script uses port `18080` by default. Set `NOP_QA_CI_PORT` before running if that port is in use. The disposable Compose project uses its own volumes and credentials. Maven runs `clean test` and writes fresh Surefire reports to `automation/target/surefire-reports/`.
+
+The workflow builds the dashboard after the smoke step, including when tests fail. Main-branch runs upload the static dashboard and deploy it through GitHub Pages. Pull requests build the report without publishing it. If no TestNG XML exists, the dashboard shows that results are unavailable and links to the workflow for diagnosis.
+
+The public JSON includes only case IDs, names, statuses, durations, and run metadata. Raw exceptions, parameters, and system properties remain outside the public dashboard. Generate a local preview after a test run with the commands below, then open `http://127.0.0.1:8766/`.
+
+```powershell
+python automation/ci/build-report.py
+python -m http.server 8766 --bind 127.0.0.1 --directory automation/target/report-site
+```
 
 ### Run selected checks
 

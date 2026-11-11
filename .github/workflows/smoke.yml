@@ -14,6 +14,8 @@ jobs:
   smoke:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    outputs:
+      report_ready: ${{ steps.pages-artifact.outcome }}
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
@@ -29,7 +31,15 @@ jobs:
           cache-dependency-path: automation/pom.xml
 
       - name: Provision the storefront and run smoke tests
+        id: tests
         run: python3 automation/ci/run-smoke.py
+
+      - name: Build the report dashboard
+        id: report
+        if: always()
+        env:
+          SMOKE_OUTCOME: ${{ steps.tests.outcome }}
+        run: python3 automation/ci/build-report.py
 
       - name: Upload Surefire reports
         if: always()
@@ -39,3 +49,28 @@ jobs:
           path: automation/target/surefire-reports/
           if-no-files-found: warn
           retention-days: 14
+
+      - name: Upload the dashboard for Pages
+        id: pages-artifact
+        if: ${{ always() && steps.report.outcome == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: automation/target/report-site/
+
+  deploy-report:
+    needs: smoke
+    if: ${{ always() && needs.smoke.outputs.report_ready == 'success' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the report dashboard
+        id: deployment
+        uses: actions/deploy-pages@v4

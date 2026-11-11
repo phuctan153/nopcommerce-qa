@@ -24,6 +24,7 @@
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
 | Portfolio review | QA-011 Prepare the project for review | README reviewed | [Portfolio overview](../README.md), traceable evidence, and repeatable run instructions |
+| Report presentation | QA-011.1 Publish a live smoke report dashboard | Implementation verified locally. Pages deployment pending. | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
 
 ## QA-002 verification remaining
 
