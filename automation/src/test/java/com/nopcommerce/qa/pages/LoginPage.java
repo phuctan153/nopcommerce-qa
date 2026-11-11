@@ -14,6 +14,7 @@ public final class LoginPage {
     private static final By EMAIL = By.cssSelector(".login-page #Email");
     private static final By PASSWORD = By.cssSelector(".login-page #Password");
     private static final By SUBMIT = By.cssSelector(".login-page button.login-button");
+    private static final By SIGN_OUT = By.cssSelector(".header-links a.ico-logout");
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -34,6 +35,8 @@ public final class LoginPage {
             throw new IllegalStateException("Could not enter QA credentials: " + exception.getClass().getSimpleName());
         }
         wait.until(ExpectedConditions.elementToBeClickable(SUBMIT)).click();
+        wait.withMessage("Signing in did not display the sign-out link.")
+                .until(ExpectedConditions.visibilityOfElementLocated(SIGN_OUT));
         return new HomePage(driver);
     }
 
