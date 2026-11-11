@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#122c34">
+  <title>nopCommerce QA — Test report</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="./" aria-label="Report home">
+      <span class="brand-mark">n<span>·</span></span>
+      <span>nopCommerce<span class="brand-sub">QUALITY ENGINEERING</span></span>
+    </a>
+    <div class="workspace-label">WORKSPACE</div>
+    <a class="nav-item active" href="#overview"><span aria-hidden="true">◫</span> Test overview <span class="nav-dot"></span></a>
+    <a class="nav-item" href="#results"><span aria-hidden="true">☷</span> Test results</a>
+    <a class="nav-item" href="https://github.com/phuctan153/nopcommerce-qa" target="_blank" rel="noopener"><span aria-hidden="true">↗</span> Source repository</a>
+    <div class="sidebar-note">
+      <span class="note-icon" aria-hidden="true">✓</span>
+      <strong>A little more confidence.<br>Every run.</strong>
+      <p>Manual testing and browser automation for the nopCommerce storefront.</p>
+      <span class="version">SELENIUM · TESTNG · MAVEN</span>
+    </div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <span>Portfolio <span class="slash">/</span> <strong>Test reports</strong></span>
+      <a id="run-link" class="top-link" href="https://github.com/phuctan153/nopcommerce-qa/actions" target="_blank" rel="noopener">View workflow <span aria-hidden="true">↗</span></a>
+    </header>
+    <main id="overview">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">NOPCOMMERCE QA PORTFOLIO</p>
+          <h1>Test overview<span class="title-dot">.</span></h1>
+          <p class="subtitle">A clear view of the latest smoke test run.</p>
+        </div>
+        <div id="run-status" class="run-state loading" role="status">Loading report</div>
+      </div>
+      <div class="run-meta">
+        <span id="source">Reading test results…</span><span class="meta-divider"></span>
+        <span id="started-at">—</span><span class="meta-divider"></span>
+        <a id="commit" hidden target="_blank" rel="noopener"></a>
+        <span>Chrome headless · nopCommerce 4.90.7</span>
+      </div>
+      <div id="notice" class="notice" hidden role="alert"></div>
+      <section class="metrics" aria-label="Run statistics">
+        <article class="metric">
+          <div class="metric-top"><span>Total tests</span><span class="metric-icon" aria-hidden="true">☷</span></div>
+          <strong id="total">—</strong><p>Executed in this run</p>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Passed</span><span class="metric-icon passed-icon" aria-hidden="true">✓</span></div>
+          <strong id="passed" class="green">—</strong><p id="pass-rate">— pass rate</p>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Failed / skipped</span><span class="metric-icon" aria-hidden="true">!</span></div>
+          <strong><span id="failed">—</span><span class="metric-separator">/</span><span id="skipped">—</span></strong>
+          <p>Failures and skipped tests</p>
+        </article>
+        <article class="metric">
+          <div class="metric-top"><span>Suite duration</span><span class="metric-icon" aria-hidden="true">◷</span></div>
+          <strong id="duration">—</strong><p>Includes browser setup &amp; teardown</p>
+        </article>
+      </section>
+      <div class="insight-grid">
+        <section class="panel distribution">
+          <div class="panel-heading"><h2>Run health</h2><span class="small-label">RESULT DISTRIBUTION</span></div>
+          <div class="health-content">
+            <div id="ring" class="ring"><div><strong id="ring-rate">—</strong><span>pass rate</span></div></div>
+            <div class="health-text">
+              <h3 id="health-title">Waiting for results</h3>
+              <p id="health-copy">The report is generated directly from TestNG results.</p>
+              <div class="legend"><span><i class="dot pass"></i>Passed</span><span><i class="dot fail"></i>Failed</span><span><i class="dot skip"></i>Skipped</span></div>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><h2>Coverage by module</h2><span class="small-label">THIS RUN</span></div>
+          <div id="modules" class="modules"></div>
+        </section>
+      </div>
+      <section id="results" class="panel results-panel">
+        <div class="results-heading">
+          <div><h2>Test results <span id="result-count" class="count">0</span></h2><p>Explore individual cases and their execution time.</p></div>
+          <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search test cases…" aria-label="Search test cases"></label>
+        </div>
+        <div class="filters">
+          <div class="status-filters" role="group" aria-label="Filter by status">
+            <button class="filter active" data-status="ALL" aria-pressed="true">All tests</button>
+            <button class="filter" data-status="PASS" aria-pressed="false">Passed</button>
+            <button class="filter" data-status="FAIL" aria-pressed="false">Failed</button>
+            <button class="filter" data-status="SKIP" aria-pressed="false">Skipped</button>
+          </div>
+          <label class="module-filter"><span>Module</span><select id="module" aria-label="Filter by module"><option value="ALL">All modules</option></select></label>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">Test case</th><th scope="col">Module</th><th scope="col">Status</th><th scope="col" class="numeric">Duration</th></tr></thead>
+            <tbody id="test-rows"></tbody>
+          </table>
+        </div>
+        <p id="empty" class="empty" hidden>No tests match these filters. Try another search or status.</p>
+        <div class="table-footer"><span id="showing" aria-live="polite">Loading tests…</span><span>One session per browser test <span class="footer-check" aria-hidden="true">✓</span></span></div>
+      </section>
+      <footer class="page-footer"><span>Built for confidence. Powered by actual test results.</span><span id="generated-at"></span></footer>
+    </main>
+  </div>
+</body>
+</html>
