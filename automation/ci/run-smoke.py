@@ -107,23 +107,27 @@ def verify_report():
 
 
 def run_suite(maven, base_url, env):
-    passwords = [env[f"NOP_QA_{fixture}_PASSWORD"] for fixture in ("LOGIN", "LOGOUT")]
+    private_values = [value for key, value in env.items()
+                      if key.startswith("NOP_QA_") and key.endswith(("_EMAIL", "_PASSWORD")) and value]
     if os.environ.get("GITHUB_ACTIONS") == "true":
-        for password in passwords:
-            print(f"::add-mask::{password}", flush=True)
+        for value in private_values:
+            print(f"::add-mask::{value}", flush=True)
     try:
         subprocess.run([
             maven, "-B", "-ntp", "-f", "automation/pom.xml",
             f"-DbaseUrl={base_url}/", "-Dbrowser=chrome", "-Dheadless=true", "clean", "test",
         ], cwd=ROOT, env=env, check=True)
     finally:
-        # A failed browser command can include submitted text in a report.
+        # A failed browser command can include submitted credentials in a report.
         for path in REPORT.parent.rglob("*"):
             if path.is_file():
+                # PNG evidence is already masked in the browser. Byte replacement can corrupt it.
+                if path.suffix.lower() not in {".xml", ".html", ".txt", ".json"}:
+                    continue
                 original = path.read_bytes()
                 sanitized = original
-                for password in passwords:
-                    sanitized = sanitized.replace(password.encode("ascii"), b"[redacted]")
+                for value in private_values:
+                    sanitized = sanitized.replace(value.encode("utf-8"), b"[redacted]")
                 if sanitized != original:
                     path.write_bytes(sanitized)
     verify_report()

@@ -41,7 +41,7 @@ jobs:
           SMOKE_OUTCOME: ${{ steps.tests.outcome }}
         run: python3 automation/ci/build-report.py
 
-      - name: Upload Surefire reports
+      - name: Upload Surefire reports and failure screenshots
         if: always()
         uses: actions/upload-artifact@v7
         with:

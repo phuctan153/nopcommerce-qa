@@ -1,5 +1,6 @@
 # Java and Maven build output
 *.class
+__pycache__/
 target/
 
 # Local VS Code settings
