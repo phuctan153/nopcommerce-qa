@@ -2,7 +2,7 @@
 
 A QA portfolio for nopCommerce covering risk-based test planning, manual execution, requirements traceability, and automated storefront smoke tests. The automated suite uses a disposable Docker environment with sample data. [Public demo used for manual testing](https://demo.nopcommerce.com/)
 
-Open the live report dashboard for the latest smoke run, module summaries, and searchable test results. [Live test report](https://phuctan153.github.io/nopcommerce-qa/)
+Open the live report dashboard for the latest smoke run, module summaries, searchable test results, and masked failure screenshots. Intentional demonstration failures are clearly labeled. [Live test report](https://phuctan153.github.io/nopcommerce-qa/)
 
 ## Results
 

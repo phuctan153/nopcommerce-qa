@@ -117,13 +117,13 @@ Archive any evidence you need before `clean`, which removes `automation/target/`
 mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" clean test
 ```
 
-On 2026-11-13, the four infrastructure checks and the Python sanitization check passed. The browser probe failed exactly once as intended, produced a visually inspected masked PNG, and completed teardown successfully. The normal suite then passed fourteen tests with zero failures, errors, or skips on Windows 11, JDK 21.0.4, Maven 3.9.9, headless Chrome 157, and local nopCommerce 4.90.7. A sandbox-restricted browser startup also confirmed that missing WebDriver produces a safe unavailable-evidence message. The updated workflow has not been pushed or run on GitHub; hosted artifact download verification remains pending.
+On 2026-11-13, the four infrastructure checks and the Python sanitization check passed. The browser probe failed exactly once as intended, produced a visually inspected masked PNG, and completed teardown successfully. The normal suite then passed fourteen tests with zero failures, errors, or skips on Windows 11, JDK 21.0.4, Maven 3.9.9, headless Chrome 157, and local nopCommerce 4.90.7. A sandbox-restricted browser startup also confirmed that missing WebDriver produces a safe unavailable-evidence message. Hosted artifact verification was subsequently completed under QA-011.3; see the following section.
 
 ## QA-011.3 screenshot viewer and intentional failure demonstration
 
 The dashboard includes an **Evidence** column. Failed cases with published masked PNGs offer **View screenshot**, which opens an accessible image dialog with full-image and download links. Close it with the close button, Escape, or the backdrop. A failed case without evidence shows **Unavailable**. Filters and case search continue to work with the viewer.
 
-The exporter reads each failed method's own `Masked failure screenshot:` reporter line, accepts only PNG basenames under the Surefire `screenshots/` directory, rejects missing/non-PNG/oversized or symbolic-link files, and publishes images using content hashes. It exports neither raw exception messages nor test parameters. A rebuild removes previously exported screenshots. Public images are accessible to anyone who can view GitHub Pages, so use synthetic storefront data and keep the privacy mask current.
+The exporter reads each failed method's own `Masked failure screenshot:` reporter line, accepts only PNG basenames under the Surefire `screenshots/` directory, rejects missing/non-PNG/oversized or symbolic-link files, and publishes images using content hashes. It exports neither raw exception messages nor test parameters. A rebuild removes previously exported screenshots and versions CSS/JavaScript URLs by content hash to avoid stale browser assets. Public images are accessible to anyone who can view GitHub Pages, so use synthetic storefront data and keep the privacy mask current.
 
 Normal push and pull-request runs still execute fourteen tests. Two additional tests in `ReportScreenshotDemoTest` are excluded by default. They deliberately assert an invented product name and a zero price through the existing Page Objects. They are evidence demonstrations, not confirmed storefront defects.
 
@@ -147,7 +147,7 @@ node automation/report/test-app.cjs test-output/qa-011.3-dom
 
 Use the ordinary full-suite command without demo properties to return to fourteen normal tests. Preserve reports before `clean` when comparing runs.
 
-On 2026-11-13, the normal local suite passed 14/14 and all seven Python regression checks passed. Local browser demonstration, visual viewer verification, and hosted deployment results are recorded in the [handoff](../docs/HANDOFF.md) as they complete.
+On 2026-11-13, normal local and hosted runs passed 14/14. The final hosted demo produced 14 passes and two intentional failures with matching PNGs, while Pages deployment succeeded. Both artifacts were downloaded and inspected. All seven Python checks and the DOM harness passed; desktop browser verification opened both public screenshot viewers and checked Escape dismissal. Mobile visual review remains open. See the [handoff](../docs/HANDOFF.md) for run links and evidence locations.
 
 ## Browser configuration
 
