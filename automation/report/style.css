@@ -247,6 +247,24 @@ tbody tr:hover { background: #fbfdfc; }
 .table-footer { border-top: 1px solid var(--line); padding: 15px 24px; display: flex; justify-content: space-between; gap: 10px; color: #7d9397; font-size: 9px; }
 .footer-check { color: #40947b; margin-left: 5px; }
 .empty { padding: 35px 24px; text-align: center; color: #71898e; font-size: 12px; }
+.demo-label { display: block; width: fit-content; margin-top: 7px; padding: 4px 6px; border-radius: 4px; background: #fff5df; color: #775d28; font-size: 9px; }
+.evidence-button { border: 1px solid #b9d7c9; border-radius: 5px; padding: 7px 10px; background: #f2f9f5; color: #216a52; font: inherit; cursor: pointer; }
+.evidence-button:hover { background: #e3f2e9; }
+.evidence-button:focus-visible, .evidence-close:focus-visible { outline: 3px solid #397cba; outline-offset: 3px; }
+.evidence-cell { white-space: nowrap; }
+.evidence-cell button + button { margin-left: 6px; }
+.evidence-unavailable { color: #819095; }
+#evidence-dialog { width: min(1100px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); box-sizing: border-box; padding: 22px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: white; overflow: auto; }
+#evidence-dialog::backdrop { background: rgb(10 30 36 / 72%); }
+.evidence-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.evidence-heading h2 { font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+.evidence-close { background: #eff4f1; color: #344e55; border: 0; border-radius: 6px; font-size: 26px; min-width: 40px; min-height: 40px; cursor: pointer; }
+#evidence-description { font-size: 12px; color: #687b80; line-height: 1.6; }
+.evidence-image { background: #eef2f0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.evidence-image img { display: block; width: 100%; height: auto; }
+.evidence-actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: 12px; line-height: 1.6; margin-top: 16px; }
+.evidence-actions span { margin-right: auto; color: #687b80; }
+.evidence-actions a { color: #216a52; text-decoration: underline; }
 .page-footer { display: flex; justify-content: space-between; gap: 20px; font-size: 9px; color: #7c9096; padding: 21px 0 0; }
 
 @media (min-width: 1500px) {

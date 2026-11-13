@@ -5,9 +5,31 @@ const moduleNames = {
   ProductSearchTest: "Catalog",
   ShoppingCartSmokeTest: "Shopping cart",
   TestConfigTest: "Configuration",
+  ReportScreenshotDemoTest: "Evidence demo",
 };
 let tests = [];
 let selectedStatus = "ALL";
+
+function screenshotPaths(test) {
+  return test.status === "FAIL" && Array.isArray(test.screenshots)
+    ? test.screenshots.filter((path) => /^screenshots\/[a-f0-9]{64}\.png$/.test(path)) : [];
+}
+
+function openEvidence(test, path) {
+  const image = byId("evidence-image");
+  byId("evidence-title").textContent = (test.caseId || test.name) + " · " + test.description;
+  byId("evidence-error").hidden = true;
+  image.hidden = false;
+  image.alt = "Masked failure screenshot for " + (test.caseId || test.name);
+  image.onerror = () => {
+    image.hidden = true;
+    byId("evidence-error").hidden = false;
+  };
+  image.src = path;
+  byId("open-evidence").href = path;
+  byId("download-evidence").href = path;
+  byId("evidence-dialog").showModal();
+}
 
 function duration(milliseconds) {
   const seconds = milliseconds / 1000;
@@ -34,11 +56,26 @@ function renderTests() {
     const row = element("tr");
     const name = element("td", "test-name", test.description);
     name.append(element("span", "test-id", test.caseId || test.name));
+    if (test.intentionalFailure) name.append(element("span", "demo-label", "Intentional failure"));
     const status = element("td");
     const knownStatus = ["PASS", "FAIL", "SKIP"].includes(test.status) ? test.status : "UNKNOWN";
     const label = {PASS: "Passed", FAIL: "Failed", SKIP: "Skipped"}[knownStatus] || "Unknown";
     status.append(element("span", "badge " + knownStatus, label));
     row.append(name, element("td", "", test.module), status, element("td", "numeric", duration(test.durationMs)));
+    const evidence = element("td", "evidence-cell");
+    const images = screenshotPaths(test);
+    if (images.length) {
+      for (const [index, path] of images.entries()) {
+        const button = element("button", "evidence-button", images.length > 1 ? "Screenshot " + (index + 1) : "View screenshot");
+        button.type = "button";
+        button.setAttribute("aria-label", "View screenshot for " + (test.caseId || test.name));
+        button.addEventListener("click", () => openEvidence(test, path));
+        evidence.append(button);
+      }
+    } else {
+      evidence.append(element("span", "evidence-unavailable", test.status === "FAIL" ? "Unavailable" : "—"));
+    }
+    row.append(evidence);
     return row;
   }));
   byId("empty").hidden = visible.length !== 0;
@@ -110,6 +147,7 @@ async function loadReport() {
       byId("ring").style.background = "conic-gradient(#259c7b 0% " + passEnd + "%, #c74949 " + passEnd + "% " + failEnd + "%, #d4a344 " + failEnd + "% 100%)";
     }
     if (!data.available) showNotice("No TestNG results were produced for this run. Storefront setup may have failed. Open the workflow for details.");
+    else if (data.demonstration) showNotice("Screenshot demonstration: DEMO-001 and DEMO-002 fail intentionally to show browser evidence. These are not reported nopCommerce defects. Normal smoke cases are listed separately; the workflow remains failed.");
     else if (workflowFailed) showNotice("The workflow failed or was cancelled. Test results below may be partial, or a provisioning or cleanup step may have failed.");
     renderModules();
     renderTests();
@@ -134,4 +172,12 @@ for (const button of document.querySelectorAll("[data-status]")) {
 }
 byId("search").addEventListener("input", renderTests);
 byId("module").addEventListener("change", renderTests);
+byId("close-evidence").addEventListener("click", () => byId("evidence-dialog").close());
+byId("evidence-dialog").addEventListener("click", (event) => {
+  if (event.target === byId("evidence-dialog")) {
+    const bounds = event.target.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right
+        || event.clientY < bounds.top || event.clientY > bounds.bottom) event.target.close();
+  }
+});
 loadReport();

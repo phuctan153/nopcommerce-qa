@@ -98,13 +98,23 @@
         </div>
         <div class="table-scroll">
           <table>
-            <thead><tr><th scope="col">Test case</th><th scope="col">Module</th><th scope="col">Status</th><th scope="col" class="numeric">Duration</th></tr></thead>
+            <thead><tr><th scope="col">Test case</th><th scope="col">Module</th><th scope="col">Status</th><th scope="col" class="numeric">Duration</th><th scope="col">Evidence</th></tr></thead>
             <tbody id="test-rows"></tbody>
           </table>
         </div>
         <p id="empty" class="empty" hidden>No tests match these filters. Try another search or status.</p>
         <div class="table-footer"><span id="showing" aria-live="polite">Loading tests…</span><span>One session per browser test <span class="footer-check" aria-hidden="true">✓</span></span></div>
       </section>
+      <dialog id="evidence-dialog" aria-labelledby="evidence-title" aria-describedby="evidence-description">
+        <div class="evidence-heading">
+          <div><p class="eyebrow">FAILURE EVIDENCE</p><h2 id="evidence-title">Screenshot</h2></div>
+          <button id="close-evidence" class="evidence-close" type="button" aria-label="Close screenshot">×</button>
+        </div>
+        <p id="evidence-description">Captured before browser teardown. Sensitive storefront fields are hidden.</p>
+        <p id="evidence-error" class="notice" role="status" hidden>Screenshot could not load. Open the workflow artifact to inspect the evidence.</p>
+        <div class="evidence-image"><img id="evidence-image" alt=""></div>
+        <div class="evidence-actions"><span>Masked browser screenshot</span><a id="open-evidence" target="_blank" rel="noopener">Open full image ↗</a><a id="download-evidence" download="failure-screenshot.png">Download PNG</a></div>
+      </dialog>
       <footer class="page-footer"><span>Built for confidence. Powered by actual test results.</span><span id="generated-at"></span></footer>
     </main>
   </div>

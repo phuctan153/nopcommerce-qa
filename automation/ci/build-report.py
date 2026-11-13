@@ -1,6 +1,7 @@
 """Build the public report using an allowlist of TestNG result fields."""
 
 from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -15,7 +16,44 @@ OUTPUT = ROOT / "automation/target/report-site"
 REPOSITORY = "https://github.com/phuctan153/nopcommerce-qa"
 
 
+def export_screenshots(method):
+    """Publish only existing PNGs attested by the masking helper for this failed method."""
+    if method.get("status") != "FAIL":
+        return []
+    images = []
+    for line in method.findall("./reporter-output/line"):
+        match = re.fullmatch(r"Masked failure screenshot: screenshots/([A-Za-z0-9_-]+\.png)",
+                             (line.text or "").strip())
+        if not match:
+            continue
+        directory = REPORT.parent / "screenshots"
+        source = directory / match.group(1)
+        if directory.is_symlink() or source.is_symlink() or not source.is_file():
+            continue
+        if source.resolve().parent != directory.resolve() or source.stat().st_size > 10 * 1024 * 1024:
+            continue
+        content = source.read_bytes()
+        if not content.startswith(b"\x89PNG\r\n\x1a\n"):
+            continue
+        relative = "screenshots/" + hashlib.sha256(content).hexdigest() + ".png"
+        (OUTPUT / "screenshots").mkdir(exist_ok=True)
+        (OUTPUT / relative).write_bytes(content)
+        if relative not in images:
+            images.append(relative)
+    return images
+
+
 def build_report():
+    OUTPUT.mkdir(parents=True, exist_ok=True)
+    evidence = OUTPUT / "screenshots"
+    if OUTPUT.is_symlink() or evidence.is_symlink():
+        raise RuntimeError("Report output must not be a symbolic link.")
+    # Remove only generated evidence, so a later successful run cannot show stale failures.
+    if evidence.exists():
+        if evidence.resolve().parent != OUTPUT.resolve():
+            raise RuntimeError("Evidence output escaped the report directory.")
+        for previous in evidence.glob("*.png"):
+            previous.unlink()
     data = {
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "source": "GitHub Actions" if os.environ.get("GITHUB_ACTIONS") == "true" else "Local run",
@@ -28,6 +66,7 @@ def build_report():
         "durationMs": 0,
         "summary": {"total": 0, "passed": 0, "failed": 0, "skipped": 0},
         "tests": [],
+        "demonstration": False,
     }
     run_id = os.environ.get("GITHUB_RUN_ID", "")
     if run_id.isdigit():
@@ -48,7 +87,7 @@ def build_report():
                 if method.get("is-config") == "true":
                     continue
                 description = method.get("description", method.get("name", "Unnamed test"))
-                case = re.match(r"(TC-[A-Z]+-\d+):\s*(.*)", description)
+                case = re.match(r"(TC-[A-Z]+-\d+|DEMO-\d+):\s*(.*)", description)
                 data["tests"].append({
                     "className": class_name,
                     "name": method.get("name", ""),
@@ -56,7 +95,12 @@ def build_report():
                     "description": case.group(2) if case else description,
                     "status": method.get("status", "UNKNOWN"),
                     "durationMs": int(method.get("duration-ms", "0")),
+                    "screenshots": export_screenshots(method),
+                    "intentionalFailure": test_class.get("name")
+                    == "com.nopcommerce.qa.tests.ReportScreenshotDemoTest",
                 })
+
+    data["demonstration"] = any(test["intentionalFailure"] for test in data["tests"])
 
     OUTPUT.mkdir(parents=True, exist_ok=True)
     for filename in ("index.html", "style.css", "app.js"):

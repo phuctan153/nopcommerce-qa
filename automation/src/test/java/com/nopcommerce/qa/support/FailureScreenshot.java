@@ -70,7 +70,7 @@ public final class FailureScreenshot {
             Files.createDirectories(directory);
             Files.write(directory.resolve(name), image);
             result.setAttribute("failureScreenshot", "screenshots/" + name);
-            report(result, "Failure screenshot: screenshots/" + name);
+            report(result, "Masked failure screenshot: screenshots/" + name);
         } catch (IOException | RuntimeException exception) {
             // Browser errors can contain credentials or page content. Do not log their messages.
             report(result, "Failure screenshot unavailable: capture or privacy masking failed."
