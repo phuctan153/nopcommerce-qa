@@ -105,6 +105,13 @@ def build_report():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     for filename in ("index.html", "style.css", "app.js"):
         shutil.copyfile(ROOT / "automation/report" / filename, OUTPUT / filename)
+    # Pages and browsers cache assets across deployments. New HTML must request matching code.
+    index = OUTPUT / "index.html"
+    html = index.read_text(encoding="utf-8")
+    for filename in ("style.css", "app.js"):
+        version = hashlib.sha256((OUTPUT / filename).read_bytes()).hexdigest()[:12]
+        html = html.replace('"' + filename + '"', '"' + filename + '?v=' + version + '"')
+    index.write_text(html, encoding="utf-8")
     (OUTPUT / "data.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
     print(f"Built report dashboard with {len(data['tests'])} test results.")
 

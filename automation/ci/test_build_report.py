@@ -57,6 +57,9 @@ class PublicEvidenceTest(unittest.TestCase):
         self.assertRegex(images[0], r"^screenshots/[a-f0-9]{64}\.png$")
         self.assertEqual((self.output / images[0]).read_bytes(), source.read_bytes())
         self.assertNotIn("PRIVATE_", json.dumps(data))
+        html = (self.output / "index.html").read_text(encoding="utf-8")
+        self.assertRegex(html, r'src="app\.js\?v=[a-f0-9]{12}"')
+        self.assertRegex(html, r'href="style\.css\?v=[a-f0-9]{12}"')
 
     def test_untrusted_missing_or_legacy_paths_are_not_published(self):
         self.image()
