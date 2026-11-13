@@ -112,10 +112,14 @@ def run_suite(maven, base_url, env):
     if os.environ.get("GITHUB_ACTIONS") == "true":
         for value in private_values:
             print(f"::add-mask::{value}", flush=True)
+    demo = env.get("NOP_QA_SCREENSHOT_DEMO", "false") == "true"
+    selection = (["-DscreenshotDemo=true",
+                  "-Dtest=*Test,!FailureScreenshotChecksTest,!FailureScreenshotProbeTest"] if demo else [])
     try:
         subprocess.run([
             maven, "-B", "-ntp", "-f", "automation/pom.xml",
-            f"-DbaseUrl={base_url}/", "-Dbrowser=chrome", "-Dheadless=true", "clean", "test",
+            f"-DbaseUrl={base_url}/", "-Dbrowser=chrome", "-Dheadless=true",
+            *selection, "clean", "test",
         ], cwd=ROOT, env=env, check=True)
     finally:
         # A failed browser command can include submitted credentials in a report.

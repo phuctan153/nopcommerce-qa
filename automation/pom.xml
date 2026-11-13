@@ -45,6 +45,7 @@
                     <excludes>
                         <exclude>**/FailureScreenshotChecksTest.java</exclude>
                         <exclude>**/FailureScreenshotProbeTest.java</exclude>
+                        <exclude>**/ReportScreenshotDemoTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

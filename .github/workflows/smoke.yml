@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      screenshot_demo:
+        description: 'Include two intentional failures to demonstrate screenshot evidence'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -30,8 +35,13 @@ jobs:
           cache: maven
           cache-dependency-path: automation/pom.xml
 
+      - name: Check the public report exporter
+        run: python3 -m unittest discover -s automation/ci -p 'test_*.py'
+
       - name: Provision the storefront and run smoke tests
         id: tests
+        env:
+          NOP_QA_SCREENSHOT_DEMO: ${{ github.event_name == 'workflow_dispatch' && inputs.screenshot_demo && 'true' || 'false' }}
         run: python3 automation/ci/run-smoke.py
 
       - name: Build the report dashboard
