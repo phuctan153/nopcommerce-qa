@@ -48,7 +48,7 @@ The [Storefront smoke suite workflow](../.github/workflows/smoke.yml) runs on pu
 
 Each run starts a fresh nopCommerce 4.90.7 and PostgreSQL instance, installs the sample catalog, and creates separate shopper accounts for login and logout. The script generates disposable passwords for that run. The job fails if Maven fails or TestNG reports skips or fewer than fourteen tests. The script removes its Compose project and volumes at the end.
 
-Open the workflow run in the repository's **Actions** tab. Download **storefront-smoke-reports** from **Artifacts** and open `index.html`. The upload step runs after a failure and keeps any reports Maven produced for 14 days. If setup failed before Maven, inspect the provisioning step's log.
+Open the workflow run in the repository's **Actions** tab. Download **storefront-smoke-reports** from **Artifacts** and open `index.html`. Failure images are included in its `screenshots/` directory; the test's reporter output identifies the filename. The upload step runs after a failure and keeps any reports Maven produced for 14 days. If setup failed before Maven, inspect the provisioning step's log.
 
 To reproduce the job from the repository root, start Docker and use Python 3 with Maven, Java, and Chrome on the machine.
 
@@ -87,6 +87,37 @@ If Maven reports a `PKIX path building failed` error on Windows and the required
 $env:MAVEN_OPTS = "$env:MAVEN_OPTS -Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE"
 mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" test
 ```
+
+## QA-011.2 failure screenshots
+
+`BaseTest` captures a viewport PNG from the current Selenium session in its always-run teardown, before quitting WebDriver. Failed test methods and skips caused by failed configuration methods trigger an attempt. Successful tests and ordinary fixture skips do not. Images are written under `automation/target/surefire-reports/screenshots/` with the class, method, and a unique ID. TestNG reporter output records the relative path. A missing browser, rejected privacy mask, or capture/write error produces a generic diagnostic and preserves the original result; teardown still runs. No raw browser exception, URL, page source, or test parameters are added to the evidence log.
+
+Before capture, the helper hides form controls, editable content, frames, canvases, account navigation, account/login/registration/checkout/order/address regions, validation errors, email text, and text containing nonempty `NOP_QA_` environment values. If masking throws or cannot be confirmed, it omits the image. CI also redacts fixture email/password values from text reports, leaving PNG bytes untouched. Screenshots remain in the downloadable report artifact and are not copied to the public Pages dashboard.
+
+Use only synthetic data. This mask covers the current storefront and fixtures; review it when new pages or sensitive components are introduced. It is not a general detector for personal data in arbitrary images or custom widgets. Inspect evidence before sharing it. Local raw Surefire reports may contain Selenium exception details; the CI text-sanitization step does not run during plain Maven commands.
+
+Run the opt-in infrastructure checks (four Java checks and one Python check):
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=FailureScreenshotChecksTest" test
+python automation/ci/test_run_smoke.py
+```
+
+Run the controlled browser probe. **This command must fail** with one intentional assertion failure and no skips. It uses a local data page containing synthetic private fields and does not contact the storefront:
+
+```powershell
+mvn -f automation/pom.xml "-Dtest=FailureScreenshotProbeTest" "-Dheadless=true" clean test
+```
+
+Open the generated PNG and confirm that only the heading and public diagnostic paragraph remain visible. Check `testng-results.xml` for the failed probe, its screenshot path, and successful `quitBrowser` configuration. Surefire explicitly excludes the infrastructure and probe classes from normal discovery; `-Dtest` selects them for verification. The smoke suite remains fourteen tests.
+
+Archive any evidence you need before `clean`, which removes `automation/target/`. Then load the local shopper fixtures using the [full-suite instructions](#run-the-full-suite-locally) and restore a fresh normal report:
+
+```powershell
+mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" clean test
+```
+
+On 2026-11-13, the four infrastructure checks and the Python sanitization check passed. The browser probe failed exactly once as intended, produced a visually inspected masked PNG, and completed teardown successfully. The normal suite then passed fourteen tests with zero failures, errors, or skips on Windows 11, JDK 21.0.4, Maven 3.9.9, headless Chrome 157, and local nopCommerce 4.90.7. A sandbox-restricted browser startup also confirmed that missing WebDriver produces a safe unavailable-evidence message. The updated workflow has not been pushed or run on GitHub; hosted artifact download verification remains pending.
 
 ## Browser configuration
 

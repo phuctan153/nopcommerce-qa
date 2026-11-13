@@ -31,6 +31,7 @@ Recheck Git status and the workbooks when resuming. The tester may have saved fu
 | QA-010 | The local run passed all fourteen tests. The first hosted run succeeded and published the Surefire artifact. |
 | QA-011 | The repository README was reviewed for portfolio use. |
 | QA-011.1 | The dashboard is published on GitHub Pages with fourteen passing tests from the hosted run. Its public data export and filter behavior are verified. Visual browser verification remains open. |
+| QA-011.2 | Masked Selenium failure screenshots are implemented and verified locally. The normal suite still passes fourteen tests. Hosted artifact verification awaits an explicitly authorized push. |
 
 The manual execution commits through Checkout were pushed to `origin/main`, ending at `0bd868e`. Local changes to `Test_Cases.xlsx` and `Test_Data.xlsx` and the three original Checkout screenshots are outside those commits. Preserve them and check their contents before staging any future change.
 
@@ -58,6 +59,8 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, [the CI reproduction script](../automation/README.md#run-in-github-actions) installed nopCommerce and provisioned two fresh shopper accounts in a disposable Compose project. Maven passed all fourteen tests with zero failures, errors, and skips on Windows 11 with JDK 21 and headless Chrome. The workflow passed `actionlint`.
 
 ## Next session
+
+QA-011.2 is implemented: `BaseTest` attempts masked screenshots before quitting on test/configuration failure. See the [failure evidence guide](../automation/README.md#qa-0112-failure-screenshots). On 2026-11-13, four opt-in Java checks and one Python sanitization check passed. A controlled browser failure generated a visually inspected masked PNG, preserved the intended assertion failure, and completed teardown. The local fourteen-test regression passed with zero failures, errors, or skips on Windows 11, JDK 21.0.4, Maven 3.9.9, and headless Chrome 157 against nopCommerce 4.90.7. Probe reports were preserved in ignored `test-output/qa-011.2-probe/` before the final clean run. Screenshots are included by the existing always-run Surefire artifact upload, but this update has not been pushed or verified on a hosted runner. After an authorized push, verify a failed-run artifact contains `screenshots/` and that Pages still excludes raw evidence. Review privacy selectors when adding new pages; use synthetic data and inspect evidence before sharing. Docker Desktop and the existing local QA Compose services were started for verification.
 
 1. Use the [portfolio README](../README.md) as the entry point for the project results, test evidence, and run instructions.
    The [live dashboard](https://phuctan153.github.io/nopcommerce-qa/) presents the latest main-branch smoke report.

@@ -25,6 +25,7 @@
 | Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
 | Portfolio review | QA-011 Prepare the project for review | README reviewed | [Portfolio overview](../README.md), traceable evidence, and repeatable run instructions |
 | Report presentation | QA-011.1 Publish a live smoke report dashboard | Published on GitHub Pages | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
+| Failure evidence | QA-011.2 Capture Selenium failure screenshots | Complete locally; hosted artifact verification pending | [Masked failure evidence and verification](../automation/README.md#qa-0112-failure-screenshots) |
 
 ## QA-002 verification remaining
 
@@ -132,3 +133,11 @@
 - Verification checked JavaScript syntax, status and module filters, case search, and missing-report and failure states in a DOM test harness. The public JSON exporter excluded parameters and exceptions in a synthetic failure report. Desktop browser preview was unavailable because the Computer Use helper could not confirm the browser URL, so visual browser verification remains open.
 - The first dashboard deployment correctly displayed thirteen passes and one failure. Investigation found that the sign-in test read navigation state before the sign-in flow had completed. An explicit wait for the sign-out link was added, and the local suite passed fourteen tests with zero failures, errors, or skips.
 - The next hosted run passed all fourteen tests and deployed the dashboard. Public HTTP checks confirmed that the HTML, CSS, JavaScript, and JSON were available, and that the JSON contained the matching commit with fourteen passes and zero failures or skips. [Verified deployment run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42975459235)
+
+## QA-011.2 failure screenshot outcome
+
+- `BaseTest` captures masked viewport PNGs before browser teardown for failed tests and configuration-induced skips. Missing sessions, privacy-mask rejection, and capture/write errors produce a sanitized diagnostic while retaining the original result and attempting teardown.
+- Evidence is stored under Surefire reports with unique class/method filenames and a reporter-output path. The existing always-run CI upload includes screenshots in `storefront-smoke-reports` for 14 days. Pages continues to publish only the existing dashboard export.
+- On 2026-11-13, four opt-in Java infrastructure checks passed. A Python regression check confirmed that failed Maven execution retains its failure, fixture email/password values are removed from text reports, and PNG bytes remain unchanged.
+- The opt-in browser probe produced one expected assertion failure, zero skips, a masked PNG inspected visually, and successful teardown. A sandbox-restricted startup separately exercised the missing-browser path. The normal suite passed all fourteen tests on local nopCommerce 4.90.7 with Windows 11, JDK 21.0.4, Maven 3.9.9, and headless Chrome 157.
+- The final report is regenerated with `clean test`; probe evidence is archived locally under ignored `test-output/qa-011.2-probe/`. Hosted upload/download verification is pending because this change has not been pushed. Dashboard desktop/mobile visual review and QA-007.2 manual defect triage remain open.
