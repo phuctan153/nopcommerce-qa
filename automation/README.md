@@ -92,7 +92,7 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" t
 
 `BaseTest` captures a viewport PNG from the current Selenium session in its always-run teardown, before quitting WebDriver. Failed test methods and skips caused by failed configuration methods trigger an attempt. Successful tests and ordinary fixture skips do not. Images are written under `automation/target/surefire-reports/screenshots/` with the class, method, and a unique ID. TestNG reporter output records the relative path. A missing browser, rejected privacy mask, or capture/write error produces a generic diagnostic and preserves the original result; teardown still runs. No raw browser exception, URL, page source, or test parameters are added to the evidence log.
 
-Before capture, the helper hides form controls, editable content, frames, canvases, account navigation, account/login/registration/checkout/order/address regions, validation errors, email text, and text containing nonempty `NOP_QA_` environment values. If masking throws or cannot be confirmed, it omits the image. CI also redacts fixture email/password values from text reports, leaving PNG bytes untouched. Screenshots remain in the downloadable report artifact and are not copied to the public Pages dashboard.
+Before capture, the helper hides form controls, editable content, frames, canvases, account navigation, account/login/registration/checkout/order/address regions, validation errors, email text, and text containing nonempty `NOP_QA_` environment values. If masking throws or cannot be confirmed, it omits the image. CI also redacts fixture email/password values from text reports, leaving PNG bytes untouched. Screenshots remain in the downloadable report artifact. QA-011.3 also publishes explicitly marked masked failure images to the Pages dashboard; see the next section.
 
 Use only synthetic data. This mask covers the current storefront and fixtures; review it when new pages or sensitive components are introduced. It is not a general detector for personal data in arbitrary images or custom widgets. Inspect evidence before sharing it. Local raw Surefire reports may contain Selenium exception details; the CI text-sanitization step does not run during plain Maven commands.
 
@@ -118,6 +118,36 @@ mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" c
 ```
 
 On 2026-11-13, the four infrastructure checks and the Python sanitization check passed. The browser probe failed exactly once as intended, produced a visually inspected masked PNG, and completed teardown successfully. The normal suite then passed fourteen tests with zero failures, errors, or skips on Windows 11, JDK 21.0.4, Maven 3.9.9, headless Chrome 157, and local nopCommerce 4.90.7. A sandbox-restricted browser startup also confirmed that missing WebDriver produces a safe unavailable-evidence message. The updated workflow has not been pushed or run on GitHub; hosted artifact download verification remains pending.
+
+## QA-011.3 screenshot viewer and intentional failure demonstration
+
+The dashboard includes an **Evidence** column. Failed cases with published masked PNGs offer **View screenshot**, which opens an accessible image dialog with full-image and download links. Close it with the close button, Escape, or the backdrop. A failed case without evidence shows **Unavailable**. Filters and case search continue to work with the viewer.
+
+The exporter reads each failed method's own `Masked failure screenshot:` reporter line, accepts only PNG basenames under the Surefire `screenshots/` directory, rejects missing/non-PNG/oversized or symbolic-link files, and publishes images using content hashes. It exports neither raw exception messages nor test parameters. A rebuild removes previously exported screenshots. Public images are accessible to anyone who can view GitHub Pages, so use synthetic storefront data and keep the privacy mask current.
+
+Normal push and pull-request runs still execute fourteen tests. Two additional tests in `ReportScreenshotDemoTest` are excluded by default. They deliberately assert an invented product name and a zero price through the existing Page Objects. They are evidence demonstrations, not confirmed storefront defects.
+
+To publish a demonstration on GitHub, open **Actions → Storefront smoke suite → Run workflow**, select `main`, and enable **screenshot_demo**. This runs the fourteen normal checks plus `DEMO-001` and `DEMO-002`. The expected result is **16 tests: 14 passed, 2 failed, 0 skipped**. Maven and the smoke job remain failed; the always-run report build and Pages deployment still publish the evidence. The dashboard labels these cases **Intentional failure** and displays a demonstration notice. A later ordinary run replaces this demonstration with the latest results.
+
+To reproduce locally after loading shopper fixtures:
+
+```powershell
+mvn -f automation/pom.xml "-DbaseUrl=http://127.0.0.1:8080/" "-Dheadless=true" "-DscreenshotDemo=true" "-Dtest=*Test,!FailureScreenshotChecksTest,!FailureScreenshotProbeTest" clean test
+# Expected nonzero exit: inspect exactly two intentional failures.
+python automation/ci/build-report.py
+python -m http.server 8766 --bind 127.0.0.1 --directory automation/target/report-site
+```
+
+Run exporter and CI sanitization checks with `python -m unittest discover -s automation/ci -p "test_*.py"`; check JavaScript syntax with `node --check automation/report/app.js`. For the optional DOM harness, install jsdom into the ignored test-output directory and run:
+
+```powershell
+npm.cmd install --prefix test-output/qa-011.3-dom --no-save --package-lock=false jsdom
+node automation/report/test-app.cjs test-output/qa-011.3-dom
+```
+
+Use the ordinary full-suite command without demo properties to return to fourteen normal tests. Preserve reports before `clean` when comparing runs.
+
+On 2026-11-13, the normal local suite passed 14/14 and all seven Python regression checks passed. Local browser demonstration, visual viewer verification, and hosted deployment results are recorded in the [handoff](../docs/HANDOFF.md) as they complete.
 
 ## Browser configuration
 
