@@ -2,6 +2,8 @@
 
 Use the [Bug Register](Bug_Tracking.xlsx) for supported application defects and the [report template](BUG_REPORT_TEMPLATE.md) for reproducible details. Keep test outcomes in the [execution workbook](../test-execution/Test_Execution.xlsx).
 
+The [QA-007.2 triage review](QA-007.2_TRIAGE.md) assesses the three historical manual Fail observations. It records missing fixture/precondition evidence and the blocked fresh verification separately from confirmed application defects.
+
 ## Triage observations
 
 | Finding | How to distinguish it | Where to record it |

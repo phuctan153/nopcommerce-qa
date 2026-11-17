@@ -10,7 +10,7 @@
 | Manual execution setup | QA-006.1 Prepare manual execution artifacts | Complete | [Execution workbook](test-execution/Test_Execution.xlsx), [execution guide](test-execution/EXECUTION_GUIDE.md), and [evidence conventions](test-execution/evidence/README.md) |
 | Manual execution | QA-006.2 Verify and execute manual tests | Execution recorded, follow-up deferred | [Execution workbook](test-execution/Test_Execution.xlsx) and [handoff notes](HANDOFF.md) |
 | Defect management setup | QA-007.1 Prepare defect management artifacts | Complete | [Bug tracking workbook](bug-reports/Bug_Tracking.xlsx), [lifecycle and severity guidelines](bug-reports/DEFECT_MANAGEMENT.md), [report template](bug-reports/BUG_REPORT_TEMPLATE.md), and [Jira reporting guide](bug-reports/BUG_REPORTING_GUIDE.md) |
-| Defect management | QA-007.2 Triage, report, and retest defects | Open | Evidence-backed defect records and retest or regression results when applicable |
+| Defect management | QA-007.2 Triage, report, and retest defects | Historical observations triaged; fresh verification blocked | [Triage dispositions, access evidence, and fresh verification checklist](bug-reports/QA-007.2_TRIAGE.md) |
 | Automation foundation | QA-008 Set up the Maven automation project | Complete | [Maven module](../automation/pom.xml) and [automation guide](../automation/README.md) |
 | UI automation | QA-009 Automate priority smoke scenarios | Complete on local nopCommerce | [Eleven browser cases and three configuration checks](../automation/README.md#run-the-full-suite-locally) |
 | UI automation | QA-009.1 First real browser smoke test | Complete on local nopCommerce. Public demo blocked. | [Independent TC-CAT-001 run](../automation/README.md#qa-0091-product-search) and [local QA environment](../automation/README.md#local-nopcommerce-qa-environment) |
@@ -63,6 +63,14 @@
 
 - The Bug Register contains zero defects. Its dashboard, filters, frozen headers, and dropdowns were validated. Formula checks used temporary entries held only in memory.
 - QA-007.2 remains open for triage, evidence-backed reporting, and retest or regression work when applicable. Jira keys are recorded only after a real issue exists in an authorized project.
+
+## QA-007.2 triage checkpoint
+
+- On 2026-11-17, the three historical Fail observations were checked against their case and data preconditions. The tester confirmed the original listing/product fixture details are no longer available. None currently establishes an application defect under valid conditions; this does not establish that the features are defect-free.
+- `TRIAGE-001` records missing enabled-filter/listing evidence for `TC-CAT-008`. `TRIAGE-002` records the unestablished required-option fixture for `TC-CART-002`. `TRIAGE-003` records the unestablished offered guest route for `TC-CHK-002`. See the [review](bug-reports/QA-007.2_TRIAGE.md).
+- An initial accessibility observation showed Cloudflare verification, but the saved screenshot shows the storefront home page; it is home-access evidence only. Native Chrome control subsequently stopped because Computer Use could not establish the current browser URL sufficiently to enforce policy. No fresh storefront case step, local substitute, application discrepancy, or fix retest is claimed.
+- Only three execution Notes cells and their row heights were updated. Original dates, actual results, Fail statuses, and blank Defect IDs were preserved. The summary remains 28 Pass, 3 Fail, 5 Blocked, 2 Skipped; the Bug Register remains unchanged with zero filed defects. Protected design/data workbooks and original Checkout screenshots were retained.
+- Record review and its traceable notes are complete. QA-007.2 remains open for the blocked fresh verification, using new fixtures and the checklist. Full completion requires those checks or an explicit decision by the tester to defer that coverage.
 
 ## QA-006.2 execution checkpoint
 

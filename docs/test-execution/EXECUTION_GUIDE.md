@@ -33,4 +33,5 @@ If the session loses its account, cart, or product fixture, pause affected cases
 
 - Follow the [evidence conventions](evidence/README.md). Capture the decisive UI state for a failure or blocker when safe. Use a sanitized path in Evidence Reference and record the relevant step in Actual Result or Notes.
 - Before reporting a potential defect, recheck the expectation, fixture, account state, and environment. Reproduce once in a clean session when safe. Record configuration uncertainty or access issues as blockers while investigating.
+- The [QA-007.2 follow-up](../bug-reports/QA-007.2_TRIAGE.md) preserves three historical Fail observations while documenting missing preconditions and fresh-verification blockers. Use its checklist for a new attempt; do not treat those historical statuses as confirmed defects or overwrite their original observations.
 - For a supported defect, record the test case and execution IDs, environment, reproduction steps, expected and actual results, shopper impact, and evidence under [bug reports](../bug-reports/). Link the filed defect's `BUG-` ID from the execution row.

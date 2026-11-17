@@ -6,6 +6,7 @@ Store sanitized evidence captured during manual execution in this directory. The
 
 - Use `<execution-id>_<YYYY-MM-DD>_a<attempt>_s<step>_<short-label>.png`. Use the actual capture date, a two-digit attempt and step number, and a short lowercase label with hyphens. Use step `00` for a blocker before the first case step.
 - Keep the Execution ID from the workbook in the filename. Increment the attempt number on a retest and use distinct labels when recording several views of one step.
+- Browser tools that return JPEG evidence may retain the same naming pattern with `.jpg`. Keep the actual file format and extension consistent. The home-access evidence under `Triage/` is referenced by the [QA-007.2 review](../../bug-reports/QA-007.2_TRIAGE.md); it is not evidence that any storefront assertion was executed.
 - In Evidence Reference, record the repository-relative path `docs/test-execution/evidence/<filename>`. For several files, put one path per line. Confirm each path resolves and the screenshot shows the step referenced by the execution record.
 
 ## Capture and privacy
