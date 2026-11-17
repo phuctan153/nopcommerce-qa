@@ -174,7 +174,7 @@ Remove-Item Env:NOP_QA_SCREENSHOT_DEMO
 
 The direct Maven demo command in QA-011.3 still exits nonzero and does not create runner verification metadata. To check the independent UI states, use the existing DOM harness. Python regressions cover expected-failure acceptance and unexpected-error rejection, sanitization, stale report protection, and exported verification binding. Update the named baseline manifest and expected demo assertions in `run-smoke.py` when intentionally changing coverage or fixtures.
 
-On 2026-11-17, all 28 Python regression checks and the DOM harness passed. The fresh local normal run passed 14/14; the local demo retained 14 passes and two expected failures while the runner exited 0 and exported a passed verification. Hosted verification results are recorded in the [handoff](../docs/HANDOFF.md) as they complete.
+On 2026-11-17, all 28 Python regression checks and the DOM harness passed. The fresh local normal run passed 14/14; the local demo retained 14 passes and two expected failures while the runner exited 0 and exported a passed verification. Both the normal hosted run and the expected-failure verification run succeeded, including deployment. Downloaded artifacts confirmed the unchanged test results and passed verification metadata. Desktop browser verification showed all three independent states and a working failure image viewer. See the [handoff](../docs/HANDOFF.md) for the run links and evidence locations.
 
 ## Browser configuration
 
