@@ -59,6 +59,10 @@ The manual execution commits through Checkout were pushed to `origin/main`, endi
 - On 2026-11-10, [the category navigation smoke tests](../automation/README.md#qa-0099-category-navigation-smoke-tests) verified the Electronics landing page and the Cell phones heading, breadcrumb, and product listing. The focused run passed both category tests. The full suite passed all fourteen tests with zero failures, errors, and skips on local nopCommerce 4.90.7 with headless Chrome.
 - On 2026-11-10, [the CI reproduction script](../automation/README.md#run-in-github-actions) installed nopCommerce and provisioned two fresh shopper accounts in a disposable Compose project. Maven passed all fourteen tests with zero failures, errors, and skips on Windows 11 with JDK 21 and headless Chrome. The workflow passed `actionlint`.
 
+## QA-011.4 in progress
+
+The tester requested correct expected-failure semantics: raw demo cases remain Fail, but the screenshot verification workflow succeeds only after exact expected outcomes and valid evidence are checked. The dashboard now separates test case results, automation verification, and deployment. See the [run guide](../automation/README.md#qa-0114-expected-failure-verification-and-independent-deployment-status). On 2026-11-17, 28 Python checks and the DOM harness passed. The fresh local normal suite passed 14/14, and the local demo retained 14 passes and two expected failures while the runner returned exit 0. Hosted checks are pending at this checkpoint. The task continues the explicitly authorized screenshot CI deployment work; original Excel and Checkout evidence remain untouched.
+
 ## Next session
 
 1. Open the [live dashboard](https://phuctan153.github.io/nopcommerce-qa/), filter **Failed**, and use **View screenshot**. The current report deliberately contains 14 passes, two intentional failures, and zero skips. These are evidence demonstrations, not reported nopCommerce defects. A future ordinary run replaces the demo with normal smoke results; leave the current demo visible unless the tester requests another run.

@@ -27,6 +27,7 @@
 | Report presentation | QA-011.1 Publish a live smoke report dashboard | Published on GitHub Pages | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
 | Failure evidence | QA-011.2 Capture Selenium failure screenshots | Complete; hosted artifacts verified | [Masked failure evidence and verification](../automation/README.md#qa-0112-failure-screenshots) |
 | Report evidence | QA-011.3 Display screenshots and publish intentional failure demonstrations | Published and verified on GitHub Pages | [Screenshot viewer and demo run](../automation/README.md#qa-0113-screenshot-viewer-and-intentional-failure-demonstration) |
+| CI result semantics | QA-011.4 Verify expected failures and separate deployment status | Verified locally; hosted checks pending | [Verification semantics](../automation/README.md#qa-0114-expected-failure-verification-and-independent-deployment-status) |
 
 ## QA-002 verification remaining
 
@@ -153,3 +154,10 @@
 - Hosted verification on 2026-11-13: the [normal run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/43396627989) passed 14/14 and deployed successfully. The [final demonstration](https://github.com/phuctan153/nopcommerce-qa/actions/runs/43397622259) ran sixteen tests with fourteen passes, exactly two intentional failures, and zero skips. The smoke job remained failed while reporting/upload/deployment succeeded.
 - Both hosted artifacts were downloaded and inspected. The demo artifact contains two valid PNGs matching the two failed methods; fixture email values were absent from text reports. Public HTTP checks confirmed matching run data, image hashes, and versioned CSS/JavaScript URLs.
 - Desktop browser verification opened both live screenshot viewers and confirmed both images loaded, plus Escape dismissal and focus return. An observed stale JavaScript cache was fixed by content-versioned asset URLs and verified through the final hosted demo. Mobile visual review remains open. The current public dashboard intentionally retains the two demonstration failures.
+
+## QA-011.4 expected-failure verification checkpoint
+
+- Demo mode verifies all fourteen named normal methods, exactly two expected assertion failures, successful setup/teardown, and two distinct valid PNGs before accepting Maven's test-failure exit code. Ordinary test failures and any unexpected demo result still fail CI. Original TestNG results are retained.
+- Stale results are removed before Maven starts. Verification status is stored separately and bound to the current XML digest; the public export includes only allowlisted status fields.
+- The dashboard separates raw test outcomes, automation verification, and the actual report deployment job. GitHub API failures show an unavailable state with a workflow link instead of assuming success.
+- On 2026-11-17, all 28 Python regressions and the DOM harness passed, including unexpected assertions, browser errors, skips, missing/corrupt evidence, configuration failure, stale reports, API fallback, and independent deployment failure. The fresh normal Selenium run passed 14/14. The fresh demo retained two expected Fail results with valid PNGs while the runner returned exit 0. Hosted results follow verification.

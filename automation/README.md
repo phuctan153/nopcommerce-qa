@@ -127,7 +127,7 @@ The exporter reads each failed method's own `Masked failure screenshot:` reporte
 
 Normal push and pull-request runs still execute fourteen tests. Two additional tests in `ReportScreenshotDemoTest` are excluded by default. They deliberately assert an invented product name and a zero price through the existing Page Objects. They are evidence demonstrations, not confirmed storefront defects.
 
-To publish a demonstration on GitHub, open **Actions → Storefront smoke suite → Run workflow**, select `main`, and enable **screenshot_demo**. This runs the fourteen normal checks plus `DEMO-001` and `DEMO-002`. The expected result is **16 tests: 14 passed, 2 failed, 0 skipped**. Maven and the smoke job remain failed; the always-run report build and Pages deployment still publish the evidence. The dashboard labels these cases **Intentional failure** and displays a demonstration notice. A later ordinary run replaces this demonstration with the latest results.
+To publish a demonstration on GitHub, open **Actions → Storefront smoke suite → Run workflow**, select `main`, and enable **screenshot_demo**. This runs the fourteen normal checks plus `DEMO-001` and `DEMO-002`. The expected result is **16 tests: 14 passed, 2 failed, 0 skipped**. Plain Maven still exits with a test failure. Starting with QA-011.4, the CI runner returns success only after verifying both exact expected assertions, all fourteen normal passes, successful configuration methods, and two distinct valid masked PNGs. Any unexpected outcome still fails CI. The dashboard labels these cases **Intentional failure** and displays a demonstration notice. A later ordinary run replaces this demonstration with the latest results.
 
 To reproduce locally after loading shopper fixtures:
 
@@ -148,6 +148,33 @@ node automation/report/test-app.cjs test-output/qa-011.3-dom
 Use the ordinary full-suite command without demo properties to return to fourteen normal tests. Preserve reports before `clean` when comparing runs.
 
 On 2026-11-13, normal local and hosted runs passed 14/14. The final hosted demo produced 14 passes and two intentional failures with matching PNGs, while Pages deployment succeeded. Both artifacts were downloaded and inspected. All seven Python checks and the DOM harness passed; desktop browser verification opened both public screenshot viewers and checked Escape dismissal. Mobile visual review remains open. See the [handoff](../docs/HANDOFF.md) for run links and evidence locations.
+
+## QA-011.4 expected-failure verification and independent deployment status
+
+Test case results are separate from the success of the screenshot mechanism. Demo TestNG results remain **14 Pass, 2 Fail, 0 Skip**. The runner accepts the Maven exit code `1` only in explicit demo mode, and only when all fourteen named baseline methods pass, exactly the two named demo methods fail with their expected assertion messages, every setup/teardown method passes, and each failure references a distinct valid masked PNG. It checks PNG structure, checksums, and bounded decompression. Missing tests, duplicate results, skips, browser/build errors, wrong assertions, missing/corrupt images, or unexpected exit codes fail verification. The default suite still requires all tests to pass.
+
+The runner removes stale XML/verification output before Maven starts, so an early build failure cannot reuse an old successful demo. It writes `verification.json` beside TestNG XML without changing that XML. The exporter accepts only allowlisted status fields bound to the current XML's SHA-256 digest; stale, missing, or malformed verification is displayed as unverified.
+
+The dashboard presents three independent states:
+
+- **Test case results:** the original TestNG Pass/Fail/Skip counts, including intentional Fail rows and their screenshots.
+- **Automation verification:** whether the runner verified the normal suite or the expected-failure screenshot mechanism. A provisioning/cleanup execution failure still requires investigation.
+- **Report deployment:** the actual `deploy-report` job conclusion, read from the public GitHub Actions API for this report's run. If the API is unavailable, the dashboard provides a workflow link and does not assume deployment succeeded. Local previews are labeled as not deployed.
+
+The demo workflow run is titled **Screenshot verification (expected test failures)**. Successful verification and successful deployment produce a green workflow while the two test cases remain Fail. No blanket `continue-on-error` is used. Historical demonstration runs from 2026-11-13 remain red because they preceded this verification behavior.
+
+To reproduce the CI runner with a disposable storefront and fresh accounts:
+
+```powershell
+$env:NOP_QA_SCREENSHOT_DEMO = 'true'
+python automation/ci/run-smoke.py
+# Exit 0 requires successful provisioning, expected-outcome verification, and cleanup.
+Remove-Item Env:NOP_QA_SCREENSHOT_DEMO
+```
+
+The direct Maven demo command in QA-011.3 still exits nonzero and does not create runner verification metadata. To check the independent UI states, use the existing DOM harness. Python regressions cover expected-failure acceptance and unexpected-error rejection, sanitization, stale report protection, and exported verification binding. Update the named baseline manifest and expected demo assertions in `run-smoke.py` when intentionally changing coverage or fixtures.
+
+On 2026-11-17, all 28 Python regression checks and the DOM harness passed. The fresh local normal run passed 14/14; the local demo retained 14 passes and two expected failures while the runner exited 0 and exported a passed verification. Hosted verification results are recorded in the [handoff](../docs/HANDOFF.md) as they complete.
 
 ## Browser configuration
 
