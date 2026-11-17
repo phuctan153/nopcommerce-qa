@@ -1,0 +1,7 @@
+Browser tab: 3, Title: "nopCommerce demo store. Checkout", URL: "https://demo.nopcommerce.com/onepagecheckout#opc-shipping".
+1 AXWebArea Description: nopCommerce demo store. Checkout, URL: demo.nopcommerce.com/onepagecheckout#opc-shipping
+	2 container demo.nopcommerce.com says
+		3 text City is required
+		4 button OK
+
+The focused UI element is 4 button OK

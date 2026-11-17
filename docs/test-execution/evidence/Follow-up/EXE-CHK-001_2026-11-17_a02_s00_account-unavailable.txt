@@ -1,0 +1,5 @@
+Target: https://demo.nopcommerce.com/login
+Date: 2026-11-17
+1 AXWebArea nopCommerce demo store. Login, URL: demo.nopcommerce.com/login
+			40 text Login was unsuccessful. Please correct the errors and try again.
+				42 text No customer account found

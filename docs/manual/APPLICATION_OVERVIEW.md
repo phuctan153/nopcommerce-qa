@@ -4,9 +4,10 @@ The [nopCommerce public demo](https://demo.nopcommerce.com/) is the shopper-faci
 
 ## Evidence and access
 
+- **Directly observed on 2026-11-17.** Public UI checks covered registration validation, sign-in/out, catalog search/navigation/sort/filter, cart operations and guest checkout through pre-submit review. All three previously unsubstantiated Fail scenarios passed with new valid fixtures. See the [dated execution record](../test-execution/FOLLOW_UP_2026-11-17.md) for observations and remaining limitations. This does not establish mail/reset coverage or the original missing fixtures.
 - **Directly observed on 2026-11-05.** The web request returned HTTP 403, and the in-app browser displayed Cloudflare's security verification page. The storefront UI did not load during exploration, so this establishes an access limitation for the session.
 - **User-reported observation.** The user manually registered an account on the public demo and reported that no email verification click was required during that registration. This applies to the reported registration only. The product supports configurable registration methods. [nopCommerce customer settings](https://docs.nopcommerce.com/en/running-your-store/customer-management/customer-settings.html)
-- **Documentation-based workflow model.** The actions and flows below describe expected product capabilities. Except for the narrow registration observation above, storefront availability, exact UI labels, and behavior are **Pending Manual Verification**.
+- **Documentation-based workflow model.** The actions and flows below describe product capabilities. Their observed coverage is maintained in the [functional checklist](FUNCTIONAL_CHECKLIST.md) and dated execution record; unobserved fields, rules and configuration remain pending.
 
 ## User roles
 

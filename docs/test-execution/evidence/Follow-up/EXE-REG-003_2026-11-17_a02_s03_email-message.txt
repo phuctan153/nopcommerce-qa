@@ -1,0 +1,4 @@
+Page: nopCommerce demo store. Register
+URL: https://demo.nopcommerce.com/register
+Captured: 2026-11-17, in-app browser accessibility observation (input values excluded)
++				144 text Please enter a valid email address.

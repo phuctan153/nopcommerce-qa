@@ -1,0 +1,2 @@
+1 AXWebArea nopCommerce demo store. Register, URL: demo.nopcommerce.com/register
+				144 text First name is required.

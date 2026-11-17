@@ -1,0 +1,7 @@
+1 AXWebArea nopCommerce demo store. Checkout, URL: demo.nopcommerce.com/onepagecheckout#opc-billing
+			9 link Description: My account, Value: demo.nopcommerce.com/customer/info
+			10 link Description: Log out, Value: demo.nopcommerce.com/logout
+		33 heading Checkout, Value: 1
+					39 heading Billing address, Value: 2
+					461 link Description: My account, Value: demo.nopcommerce.com/customer/info
+The focused UI element is 1 AXWebArea nopCommerce demo store. Checkout, URL: demo.nopcommerce.com/onepagecheckout#opc-billing

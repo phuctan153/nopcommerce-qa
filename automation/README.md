@@ -176,6 +176,8 @@ The direct Maven demo command in QA-011.3 still exits nonzero and does not creat
 
 On 2026-11-17, all 28 Python regression checks and the DOM harness passed. The fresh local normal run passed 14/14; the local demo retained 14 passes and two expected failures while the runner exited 0 and exported a passed verification. Both the normal hosted run and the expected-failure verification run succeeded, including deployment. Downloaded artifacts confirmed the unchanged test results and passed verification metadata. Desktop browser verification showed all three independent states and a working failure image viewer. See the [handoff](../docs/HANDOFF.md) for the run links and evidence locations.
 
+The later [responsive review](../docs/manual/PORTFOLIO_REVIEW.md) checked the published report at 390px, 320px and 768px. Both mobile screenshot viewers worked. QA-011-RWD-001 records narrow-screen heading/status overflow and its prepared CSS correction. Modified-layout visual retest and deployment remain pending; passing the DOM harness does not prove responsive layout. A normal Maven rerun passed 14/14 after the CSS edit, along with all 28 Python regressions and the DOM checks.
+
 ## Browser configuration
 
 Tests extending `BaseTest` read these JVM properties:

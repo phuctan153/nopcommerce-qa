@@ -3,14 +3,14 @@
 | Phase | Task | Status | Deliverable |
 | --- | --- | --- | --- |
 | Foundation | QA-001 Initialize project structure | Complete | Repository layout, contribution guidelines, README, ignore rules, and task tracker |
-| Manual test design | QA-002 Application exploration and test scope definition | Documentation complete, manual verification pending | [Application overview](manual/APPLICATION_OVERVIEW.md), [test scope](manual/TEST_SCOPE.md), and [functional checklist](manual/FUNCTIONAL_CHECKLIST.md) |
+| Manual test design | QA-002 Application exploration and test scope definition | Core public UI verified; mail and conditional coverage gaps remain | [Application overview](manual/APPLICATION_OVERVIEW.md), [functional checklist](manual/FUNCTIONAL_CHECKLIST.md), and [dated follow-up](test-execution/FOLLOW_UP_2026-11-17.md) |
 | Test planning | QA-003 Test planning and risk assessment | Complete | [Test plan](manual/TEST_PLAN.md), [risk assessment](manual/RISK_ASSESSMENT.md), and [testing strategy](manual/TEST_STRATEGY.md) |
 | Manual scenario design | QA-004 Design test scenarios in Excel | Complete | [Test scenario workbook](test-cases/Test_Scenarios.xlsx) with prioritized scenarios and checklist traceability |
 | Detailed manual design | QA-005 Design detailed test cases and test data | Complete | [Test cases](test-cases/Test_Cases.xlsx), [test data](test-cases/Test_Data.xlsx), and [requirements traceability matrix](test-cases/RTM.xlsx) |
 | Manual execution setup | QA-006.1 Prepare manual execution artifacts | Complete | [Execution workbook](test-execution/Test_Execution.xlsx), [execution guide](test-execution/EXECUTION_GUIDE.md), and [evidence conventions](test-execution/evidence/README.md) |
-| Manual execution | QA-006.2 Verify and execute manual tests | Execution recorded, follow-up deferred | [Execution workbook](test-execution/Test_Execution.xlsx) and [handoff notes](HANDOFF.md) |
+| Manual execution | QA-006.2 Verify and execute manual tests | Historical execution retained; follow-up recorded with explicit gaps | [Execution workbook](test-execution/Test_Execution.xlsx) and [new 38-case follow-up ledger](test-execution/FOLLOW_UP_2026-11-17.md) |
 | Defect management setup | QA-007.1 Prepare defect management artifacts | Complete | [Bug tracking workbook](bug-reports/Bug_Tracking.xlsx), [lifecycle and severity guidelines](bug-reports/DEFECT_MANAGEMENT.md), [report template](bug-reports/BUG_REPORT_TEMPLATE.md), and [Jira reporting guide](bug-reports/BUG_REPORTING_GUIDE.md) |
-| Defect management | QA-007.2 Triage, report, and retest defects | Historical observations triaged; fresh verification blocked | [Triage dispositions, access evidence, and fresh verification checklist](bug-reports/QA-007.2_TRIAGE.md) |
+| Defect management | QA-007.2 Triage, report, and retest defects | Complete for the three historical Fail observations; fresh checks passed | [Triage dispositions and fresh verification](bug-reports/QA-007.2_TRIAGE.md); no confirmed storefront defect or fix to retest |
 | Automation foundation | QA-008 Set up the Maven automation project | Complete | [Maven module](../automation/pom.xml) and [automation guide](../automation/README.md) |
 | UI automation | QA-009 Automate priority smoke scenarios | Complete on local nopCommerce | [Eleven browser cases and three configuration checks](../automation/README.md#run-the-full-suite-locally) |
 | UI automation | QA-009.1 First real browser smoke test | Complete on local nopCommerce. Public demo blocked. | [Independent TC-CAT-001 run](../automation/README.md#qa-0091-product-search) and [local QA environment](../automation/README.md#local-nopcommerce-qa-environment) |
@@ -23,18 +23,20 @@
 | UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
-| Portfolio review | QA-011 Prepare the project for review | README reviewed | [Portfolio overview](../README.md), traceable evidence, and repeatable run instructions |
+| Portfolio review | QA-011 Prepare the project for review | Review recorded; narrow-mobile CSS fix awaits visual retest/deployment | [Portfolio overview](../README.md) and [responsive review / QA-011-RWD-001](manual/PORTFOLIO_REVIEW.md) |
 | Report presentation | QA-011.1 Publish a live smoke report dashboard | Published on GitHub Pages | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
 | Failure evidence | QA-011.2 Capture Selenium failure screenshots | Complete; hosted artifacts verified | [Masked failure evidence and verification](../automation/README.md#qa-0112-failure-screenshots) |
 | Report evidence | QA-011.3 Display screenshots and publish intentional failure demonstrations | Published and verified on GitHub Pages | [Screenshot viewer and demo run](../automation/README.md#qa-0113-screenshot-viewer-and-intentional-failure-demonstration) |
 | CI result semantics | QA-011.4 Verify expected failures and separate deployment status | Complete and verified on hosted CI | [Verification semantics](../automation/README.md#qa-0114-expected-failure-verification-and-independent-deployment-status) |
 
-## QA-002 verification remaining
+## Current manual and portfolio follow-up
 
-- Retry the public demo in a normal manual browser. On 2026-11-05 the web request returned HTTP 403 and the in-app browser showed a security verification page.
-- Confirm account field and credential validation, login and logout, and recovery with a controlled inbox if available. The user-reported registration without an email verification click is recorded under `FC-ACC-001`.
-- Confirm search, category navigation, product details, available sorting and filtering, and cart add, update, remove, and subtotal behavior.
-- Confirm checkout entry, billing, shipping, and pre-submit review up to the last safe point. Post-submit confirmation requires an authorized test-order sandbox.
+- On 2026-11-17, public UI follow-up recorded 31 Pass, 6 Blocked, 1 Skipped and 0 Not Run in a separate ledger. The historical workbook remains unchanged. All three historical Fail scenarios passed with valid new fixtures; QA-007.2's current triage scope is complete. [Run record and evidence](test-execution/FOLLOW_UP_2026-11-17.md)
+- TC-AUTH-006 is now verified. TC-AUTH-005/007/008/009 remain blocked because the tester confirmed no controlled receiving inbox is available. No reset link or credential reset was fabricated.
+- TC-AUTH-002 needs expectation review: an omitted password is rejected with generic incorrect-credentials feedback, while the case asks for missing-input feedback. The follow-up records Blocked pending a supported message requirement, not Pass or a filed defect.
+- TC-CART-004 passed with zero removing the controlled line, and signed-in TC-CHK-001 reached Billing after restoring an unavailable account fixture. TC-CART-005 is Blocked for lack of a safe confirmed small upper limit; no large quantity was submitted. TC-CHK-006 was intentionally skipped because this fixture offers manual shipping; TC-CHK-007 passed with an omitted City.
+- Guest checkout, billing validation, separate shipping validation, delivery selection and pre-submit reconciliation were observed. Post-submit confirmation remains outside the public-demo boundary.
+- Live report review covered 390px and 768px without page overflow and found about 11px overflow at 320px. The CSS correction for QA-011-RWD-001 is prepared; modified-layout visual retest and deployment remain pending. [Review](manual/PORTFOLIO_REVIEW.md)
 
 ## QA-003 planning outcome
 
@@ -64,13 +66,15 @@
 - The Bug Register contains zero defects. Its dashboard, filters, frozen headers, and dropdowns were validated. Formula checks used temporary entries held only in memory.
 - QA-007.2 remains open for triage, evidence-backed reporting, and retest or regression work when applicable. Jira keys are recorded only after a real issue exists in an authorized project.
 
-## QA-007.2 triage checkpoint
+## Earlier QA-007.2 triage checkpoint
 
 - On 2026-11-17, the three historical Fail observations were checked against their case and data preconditions. The tester confirmed the original listing/product fixture details are no longer available. None currently establishes an application defect under valid conditions; this does not establish that the features are defect-free.
 - `TRIAGE-001` records missing enabled-filter/listing evidence for `TC-CAT-008`. `TRIAGE-002` records the unestablished required-option fixture for `TC-CART-002`. `TRIAGE-003` records the unestablished offered guest route for `TC-CHK-002`. See the [review](bug-reports/QA-007.2_TRIAGE.md).
 - An initial accessibility observation showed Cloudflare verification, but the saved screenshot shows the storefront home page; it is home-access evidence only. Native Chrome control subsequently stopped because Computer Use could not establish the current browser URL sufficiently to enforce policy. No fresh storefront case step, local substitute, application discrepancy, or fix retest is claimed.
 - Only three execution Notes cells and their row heights were updated. Original dates, actual results, Fail statuses, and blank Defect IDs were preserved. The summary remains 28 Pass, 3 Fail, 5 Blocked, 2 Skipped; the Bug Register remains unchanged with zero filed defects. Protected design/data workbooks and original Checkout screenshots were retained.
 - Record review and its traceable notes are complete. QA-007.2 remains open for the blocked fresh verification, using new fixtures and the checklist. Full completion requires those checks or an explicit decision by the tester to defer that coverage.
+
+This earlier access/control checkpoint is superseded by the successful new-fixture checks in the current follow-up above. Original workbook notes are retained as dated history.
 
 ## QA-006.2 execution checkpoint
 
