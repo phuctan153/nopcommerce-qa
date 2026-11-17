@@ -23,7 +23,7 @@
 | UI automation | QA-009.8 Automate search with no results | Complete on local nopCommerce | [TC-CAT-002 run](../automation/README.md#qa-0098-search-with-no-results) |
 | UI automation | QA-009.9 Automate category and subcategory navigation | Complete on local nopCommerce | [TC-CAT-004 and TC-CAT-005 runs](../automation/README.md#qa-0099-category-navigation-smoke-tests) |
 | Continuous integration | QA-010 Add GitHub Actions | Hosted run passed and artifact published | [First hosted run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311) |
-| Portfolio review | QA-011 Prepare the project for review | Review recorded; narrow-mobile CSS fix awaits visual retest/deployment | [Portfolio overview](../README.md) and [responsive review / QA-011-RWD-001](manual/PORTFOLIO_REVIEW.md) |
+| Portfolio review | QA-011 Prepare the project for review | Complete for the tested browser/viewport matrix; manual gaps remain explicit | [Portfolio overview](../README.md) and [responsive review / QA-011-RWD-001](manual/PORTFOLIO_REVIEW.md) |
 | Report presentation | QA-011.1 Publish a live smoke report dashboard | Published on GitHub Pages | [Report dashboard](https://phuctan153.github.io/nopcommerce-qa/) |
 | Failure evidence | QA-011.2 Capture Selenium failure screenshots | Complete; hosted artifacts verified | [Masked failure evidence and verification](../automation/README.md#qa-0112-failure-screenshots) |
 | Report evidence | QA-011.3 Display screenshots and publish intentional failure demonstrations | Published and verified on GitHub Pages | [Screenshot viewer and demo run](../automation/README.md#qa-0113-screenshot-viewer-and-intentional-failure-demonstration) |
@@ -36,7 +36,7 @@
 - TC-AUTH-002 needs expectation review: an omitted password is rejected with generic incorrect-credentials feedback, while the case asks for missing-input feedback. The follow-up records Blocked pending a supported message requirement, not Pass or a filed defect.
 - TC-CART-004 passed with zero removing the controlled line, and signed-in TC-CHK-001 reached Billing after restoring an unavailable account fixture. TC-CART-005 is Blocked for lack of a safe confirmed small upper limit; no large quantity was submitted. TC-CHK-006 was intentionally skipped because this fixture offers manual shipping; TC-CHK-007 passed with an omitted City.
 - Guest checkout, billing validation, separate shipping validation, delivery selection and pre-submit reconciliation were observed. Post-submit confirmation remains outside the public-demo boundary.
-- Live report review covered 390px and 768px without page overflow and found about 11px overflow at 320px. The CSS correction for QA-011-RWD-001 is prepared; modified-layout visual retest and deployment remain pending. [Review](manual/PORTFOLIO_REVIEW.md)
+- Live report review covered 390px and 768px without page overflow and found about 11px overflow at 320px. QA-011-RWD-001 was fixed in `e7b4476`, deployed and visually retested at 320/390/768px, plus 1440px normal-run regression. Both normal and demo workflows succeeded; the verified demo remains public. [Review](manual/PORTFOLIO_REVIEW.md)
 
 ## QA-003 planning outcome
 
