@@ -1,6 +1,7 @@
 """Regression checks for the public evidence allowlist and stale screenshot cleanup."""
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -99,6 +100,23 @@ class PublicEvidenceTest(unittest.TestCase):
         self.assertFalse(data["available"])
         self.assertEqual(data["tests"], [])
         self.assertEqual(list((self.output / "screenshots").glob("*.png")), [])
+
+    def test_verification_exports_only_allowlisted_status_bound_to_current_xml(self):
+        self.write_report("")
+        value = {"status": "passed", "mode": "screenshot-demo", "PRIVATE_FIELD": "PRIVATE_VALUE",
+                 "reportSha256": hashlib.sha256(self.report.read_bytes()).hexdigest()}
+        (self.report.parent / "verification.json").write_text(json.dumps(value))
+        data = self.build()
+        self.assertEqual(data["verification"], {"status": "passed", "mode": "screenshot-demo"})
+        self.assertNotIn("PRIVATE_", json.dumps(data))
+        self.write_report("changed")
+        self.assertEqual(self.build()["verification"]["status"], "unavailable")
+
+    def test_missing_or_malformed_verification_does_not_claim_success(self):
+        self.write_report("")
+        self.assertEqual(self.build()["verification"]["status"], "unavailable")
+        (self.report.parent / "verification.json").write_text("invalid JSON")
+        self.assertEqual(self.build()["verification"]["status"], "unavailable")
 
 
 if __name__ == "__main__":

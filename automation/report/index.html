@@ -46,6 +46,11 @@
         <span>Chrome headless · nopCommerce 4.90.7</span>
       </div>
       <div id="notice" class="notice" hidden role="alert"></div>
+      <section class="process-status" aria-label="Independent execution and deployment status">
+        <article><h2>Test case results</h2><p id="case-status">Waiting for TestNG</p></article>
+        <article><h2>Automation verification</h2><p id="verification-status">Not verified</p></article>
+        <article><h2>Report deployment</h2><p id="deployment-status" role="status">Checking status…</p><a id="deployment-link" hidden target="_blank" rel="noopener">View deployment ↗</a></article>
+      </section>
       <section class="metrics" aria-label="Run statistics">
         <article class="metric">
           <div class="metric-top"><span>Total tests</span><span class="metric-icon" aria-hidden="true">☷</span></div>
@@ -67,7 +72,7 @@
       </section>
       <div class="insight-grid">
         <section class="panel distribution">
-          <div class="panel-heading"><h2>Run health</h2><span class="small-label">RESULT DISTRIBUTION</span></div>
+          <div class="panel-heading"><h2>Test result distribution</h2><span class="small-label">TESTNG OUTCOMES</span></div>
           <div class="health-content">
             <div id="ring" class="ring"><div><strong id="ring-rate">—</strong><span>pass rate</span></div></div>
             <div class="health-text">

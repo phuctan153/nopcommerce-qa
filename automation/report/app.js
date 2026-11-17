@@ -109,6 +109,29 @@ function showNotice(message) {
   byId("notice").hidden = false;
 }
 
+async function loadDeployment(runUrl) {
+  const status = byId("deployment-status");
+  const match = /^https:\/\/github\.com\/phuctan153\/nopcommerce-qa\/actions\/runs\/(\d+)$/.exec(runUrl || "");
+  if (!match) {
+    status.textContent = "Local preview · not deployed";
+    return;
+  }
+  const link = byId("deployment-link");
+  link.href = runUrl;
+  link.hidden = false;
+  try {
+    const response = await fetch("https://api.github.com/repos/phuctan153/nopcommerce-qa/actions/runs/" + match[1] + "/jobs", {cache: "no-store"});
+    if (!response.ok) throw new Error("Deployment status unavailable.");
+    const data = await response.json();
+    const job = Array.isArray(data.jobs) ? data.jobs.find((job) => job.name === "deploy-report") : null;
+    const labels = {success: "Succeeded", failure: "Failed", cancelled: "Cancelled", skipped: "Skipped"};
+    status.textContent = job ? labels[job.conclusion] || "In progress" : "Pending";
+    status.className = job?.conclusion === "success" ? "status-passed" : job?.conclusion === "failure" ? "status-failed" : "";
+  } catch (error) {
+    status.textContent = "Status unavailable · check workflow";
+  }
+}
+
 async function loadReport() {
   try {
     const response = await fetch("data.json", {cache: "no-store"});
@@ -135,22 +158,30 @@ async function loadReport() {
       byId("commit").href = data.repositoryUrl + "/commit/" + data.commit;
       byId("commit").hidden = false;
     }
-    const workflowFailed = ["failure", "cancelled"].includes(data.workflowStatus);
+    const workflowFailed = ["failure", "cancelled"].includes(data.automationStatus ?? data.workflowStatus);
     const healthy = data.available && total > 0 && passed === total && !failed && !skipped && !workflowFailed;
-    byId("run-status").className = "run-state " + (healthy ? "" : data.available ? "failed" : "warning");
-    byId("run-status").textContent = healthy ? "All checks passed" : data.available ? "Run needs attention" : "Results unavailable";
-    byId("health-title").textContent = healthy ? "Looking good. All tests passed." : data.available ? "This run needs a closer look." : "Tests did not produce a report.";
-    byId("health-copy").textContent = healthy ? passed + " checks passed across " + new Set(tests.map((test) => test.module)).size + " modules." : "Open the workflow to inspect the failed or incomplete step.";
+    const verifiedDemo = data.demonstration && data.verification?.mode === "screenshot-demo" && data.verification?.status === "passed" && !workflowFailed;
+    byId("case-status").textContent = data.available ? passed + " passed · " + failed + " failed · " + skipped + " skipped" : "Results unavailable";
+    byId("case-status").className = !data.available ? "" : failed || skipped ? "status-failed" : "status-passed";
+    const verification = data.verification?.status;
+    byId("verification-status").textContent = verification === "passed" ? (workflowFailed ? "Verification passed · execution failed" : data.verification.mode === "screenshot-demo" ? "Screenshot check passed" : "Normal suite verified") : verification === "failed" ? "Verification failed" : workflowFailed ? "Execution failed · not verified" : "Not verified";
+    byId("verification-status").className = workflowFailed || verification === "failed" ? "status-failed" : verification === "passed" ? "status-passed" : "";
+    byId("run-status").className = "run-state " + (healthy || verifiedDemo ? "" : data.available ? "failed" : "warning");
+    byId("run-status").textContent = verifiedDemo ? "Screenshot verification passed" : healthy ? "Test suite passed" : data.available ? "Automation needs attention" : "Results unavailable";
+    byId("health-title").textContent = verifiedDemo ? "Two expected assertions failed." : healthy ? "All test cases passed." : data.available ? "Review the test case outcomes." : "Tests did not produce a report.";
+    byId("health-copy").textContent = verifiedDemo ? "All 14 normal checks passed. Both intentional failures have verified screenshots." : healthy ? passed + " checks passed across " + new Set(tests.map((test) => test.module)).size + " modules." : "Test case results, automation verification, and report deployment are shown separately above.";
     if (total) {
       const passEnd = passed / total * 100;
       const failEnd = passEnd + failed / total * 100;
       byId("ring").style.background = "conic-gradient(#259c7b 0% " + passEnd + "%, #c74949 " + passEnd + "% " + failEnd + "%, #d4a344 " + failEnd + "% 100%)";
     }
     if (!data.available) showNotice("No TestNG results were produced for this run. Storefront setup may have failed. Open the workflow for details.");
-    else if (data.demonstration) showNotice("Screenshot demonstration: DEMO-001 and DEMO-002 fail intentionally to show browser evidence. These are not reported nopCommerce defects. Normal smoke cases are listed separately; the workflow remains failed.");
+    else if (verifiedDemo) showNotice("Screenshot demonstration verified: DEMO-001 and DEMO-002 retain their intentional Fail results. All 14 normal checks passed, both exact assertion failures were confirmed, and both screenshots were validated. This verifies failure reporting; it does not report nopCommerce defects.");
+    else if (data.demonstration) showNotice("Screenshot demonstration is not verified. The two demo cases are intended to fail, but unexpected outcomes, missing evidence, or workflow errors still require investigation.");
     else if (workflowFailed) showNotice("The workflow failed or was cancelled. Test results below may be partial, or a provisioning or cleanup step may have failed.");
     renderModules();
     renderTests();
+    await loadDeployment(data.runUrl);
   } catch (error) {
     byId("run-status").className = "run-state warning";
     byId("run-status").textContent = "Report could not load";

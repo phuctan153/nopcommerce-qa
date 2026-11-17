@@ -171,6 +171,13 @@ h1 { font: 800 34px Manrope, sans-serif; letter-spacing: -1.3px; margin: 0; }
   margin-bottom: 20px;
 }
 .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 17px; margin-bottom: 22px; }
+.process-status { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; margin-bottom: 22px; }
+.process-status article { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; }
+.process-status h2 { color: #6e7d82; font-size: 11px; font-weight: 500; }
+.process-status p { font-size: 12px; font-weight: 600; line-height: 1.6; margin: 9px 0 0; }
+.process-status a { display: inline-block; margin-top: 7px; color: #216a52; font-size: 11px; text-decoration: underline; }
+.status-passed { color: var(--green); }
+.status-failed { color: var(--red); }
 .metric { background: white; border: 1px solid var(--line); border-radius: 9px; padding: 21px 23px 19px; }
 .metric-top { display: flex; align-items: center; justify-content: space-between; color: #6e7d82; font-size: 11px; }
 .metric-icon {

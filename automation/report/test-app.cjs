@@ -15,7 +15,13 @@ const cases = [
 async function load(tests, extra = {}) {
   const dom = new JSDOM(html, { url: "https://example.com/nopcommerce-qa/", runScripts: "outside-only" });
   const { window } = dom;
-  window.fetch = async () => ({ ok: true, json: async () => ({ tests, available: true, source: "Local test", generatedAt: new Date().toISOString(), durationMs: 1000, summary: { total: tests.length, passed: 1, failed: tests.length - 1, skipped: 0 }, workflowStatus: "failure", demonstration: true, ...extra }) });
+  window.fetch = async (url) => {
+    if (url.startsWith("https://api.github.com/")) {
+      if (extra.deploymentUnavailable) return {ok: false};
+      return {ok: true, json: async () => ({jobs: [{name: "deploy-report", conclusion: extra.deploymentConclusion || "success"}]})};
+    }
+    return { ok: true, json: async () => ({ tests, available: true, source: "Local test", generatedAt: new Date().toISOString(), durationMs: 1000, summary: { total: tests.length, passed: 1, failed: tests.length - 1, skipped: 0 }, automationStatus: "success", demonstration: true, verification: {mode: "screenshot-demo", status: "passed"}, runUrl: "https://github.com/phuctan153/nopcommerce-qa/actions/runs/123", ...extra }) };
+  };
   window.HTMLDialogElement.prototype.showModal = function () { this.open = true; };
   window.HTMLDialogElement.prototype.close = function () { this.open = false; };
   window.eval(script);
@@ -29,6 +35,11 @@ async function load(tests, extra = {}) {
   assert.equal(doc.querySelectorAll("#test-rows tr").length, 3);
   assert.equal(doc.querySelectorAll(".evidence-button").length, 2);
   assert.match(doc.querySelector("#notice").textContent, /demonstration/);
+  assert.equal(doc.querySelector("#failed").textContent, "2");
+  assert.equal(doc.querySelector("#run-status").textContent, "Screenshot verification passed");
+  assert.equal(doc.querySelector("#case-status").textContent, "1 passed · 2 failed · 0 skipped");
+  assert.equal(doc.querySelector("#verification-status").textContent, "Screenshot check passed");
+  assert.equal(doc.querySelector("#deployment-status").textContent, "Succeeded");
   doc.querySelector('[data-status="FAIL"]').click();
   assert.equal(doc.querySelectorAll("#test-rows tr").length, 2);
   doc.querySelector(".evidence-button").click();
@@ -58,10 +69,36 @@ async function load(tests, extra = {}) {
   assert.match(window.document.querySelector(".evidence-cell").textContent, /Unavailable/);
   window.close();
 
-  window = await load([{ ...cases[0], screenshots: [image] }], { demonstration: false, workflowStatus: "success", summary: { total: 1, passed: 1, failed: 0, skipped: 0 } });
+  window = await load([{ ...cases[0], screenshots: [image] }], { demonstration: false, verification: {mode: "smoke", status: "passed"}, summary: { total: 1, passed: 1, failed: 0, skipped: 0 } });
   assert.equal(window.document.querySelectorAll(".evidence-button").length, 0);
   assert.equal(window.document.querySelector("#notice").hidden, true);
-  assert.match(window.document.querySelector("#run-status").textContent, /All checks passed/);
+  assert.match(window.document.querySelector("#run-status").textContent, /Test suite passed/);
+  assert.equal(window.document.querySelector("#verification-status").textContent, "Normal suite verified");
   window.close();
-  console.log("Dashboard DOM checks passed: filters, both viewers, links, image errors, missing evidence, and normal success.");
+
+  window = await load(cases, {verification: {mode: "screenshot-demo", status: "failed"}, automationStatus: "failure"});
+  assert.equal(window.document.querySelector("#run-status").textContent, "Automation needs attention");
+  assert.match(window.document.querySelector("#notice").textContent, /not verified/);
+  assert.equal(window.document.querySelector("#deployment-status").textContent, "Succeeded");
+  window.close();
+
+  window = await load(cases, {deploymentConclusion: "failure"});
+  assert.equal(window.document.querySelector("#verification-status").textContent, "Screenshot check passed");
+  assert.equal(window.document.querySelector("#deployment-status").textContent, "Failed");
+  window.close();
+
+  window = await load(cases, {deploymentUnavailable: true});
+  assert.equal(window.document.querySelector("#deployment-status").textContent, "Status unavailable · check workflow");
+  window.close();
+
+  window = await load(cases, {verification: {status: "unavailable", mode: "unknown"}});
+  assert.equal(window.document.querySelector("#verification-status").textContent, "Not verified");
+  assert.notEqual(window.document.querySelector("#run-status").textContent, "Screenshot verification passed");
+  window.close();
+
+  window = await load(cases, {automationStatus: "failure"});
+  assert.match(window.document.querySelector("#verification-status").textContent, /execution failed/);
+  assert.equal(window.document.querySelector("#run-status").textContent, "Automation needs attention");
+  window.close();
+  console.log("Dashboard DOM checks passed: raw Fail results, verification/deployment independence, API fallback, filters, images, and failure states.");
 })().catch((error) => { console.error(error); process.exitCode = 1; });

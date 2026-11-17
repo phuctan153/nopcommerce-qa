@@ -16,6 +16,18 @@ OUTPUT = ROOT / "automation/target/report-site"
 REPOSITORY = "https://github.com/phuctan153/nopcommerce-qa"
 
 
+def read_verification():
+    try:
+        value = json.loads((REPORT.parent / "verification.json").read_text(encoding="utf-8"))
+        if (REPORT.is_file() and value.get("reportSha256") == hashlib.sha256(REPORT.read_bytes()).hexdigest()
+                and value.get("status") in {"passed", "failed"}
+                and value.get("mode") in {"smoke", "screenshot-demo"}):
+            return {"status": value["status"], "mode": value["mode"]}
+    except (OSError, ValueError, AttributeError):
+        pass
+    return {"status": "unavailable", "mode": "unknown"}
+
+
 def export_screenshots(method):
     """Publish only existing PNGs attested by the masking helper for this failed method."""
     if method.get("status") != "FAIL":
@@ -60,13 +72,14 @@ def build_report():
         "repositoryUrl": REPOSITORY,
         "runUrl": None,
         "commit": None,
-        "workflowStatus": os.environ.get("SMOKE_OUTCOME", "unknown"),
+        "automationStatus": os.environ.get("SMOKE_OUTCOME", "unknown"),
         "available": REPORT.is_file(),
         "startedAt": None,
         "durationMs": 0,
         "summary": {"total": 0, "passed": 0, "failed": 0, "skipped": 0},
         "tests": [],
         "demonstration": False,
+        "verification": read_verification(),
     }
     run_id = os.environ.get("GITHUB_RUN_ID", "")
     if run_id.isdigit():
