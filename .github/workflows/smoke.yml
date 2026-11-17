@@ -1,4 +1,5 @@
 name: Storefront smoke suite
+run-name: ${{ github.event_name == 'workflow_dispatch' && inputs.screenshot_demo && 'Screenshot verification (expected test failures)' || 'Storefront smoke suite' }}
 
 on:
   push:
@@ -38,7 +39,7 @@ jobs:
       - name: Check the public report exporter
         run: python3 -m unittest discover -s automation/ci -p 'test_*.py'
 
-      - name: Provision the storefront and run smoke tests
+      - name: Provision the storefront, run tests, and verify outcomes
         id: tests
         env:
           NOP_QA_SCREENSHOT_DEMO: ${{ github.event_name == 'workflow_dispatch' && inputs.screenshot_demo && 'true' || 'false' }}
