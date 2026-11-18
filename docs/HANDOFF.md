@@ -87,3 +87,9 @@ Desktop browser verification confirmed the three visible states together: **14 p
 [Normal verification](https://github.com/phuctan153/nopcommerce-qa/actions/runs/44051754267) and [screenshot demo verification](https://github.com/phuctan153/nopcommerce-qa/actions/runs/44052146636) both succeeded with code commit `e7b4476`. The public report retains the latter: 14 Pass, 2 intentional Fail, 0 Skip, two masked images, passed verification and successful deployment. Downloaded artifacts matched these outcomes and verification digests. The earlier QA-011.4 run links above are historical checkpoints.
 
 Browser retest: document client/scroll widths match at 320px (305/305), 390px (375/375), 768px (753/753) and normal desktop 1440px (1425/1425). Both viewers loaded; search/status/module filters and Escape focus return worked. Viewport overrides and filters were reset. No personal browser profile was used for this retest. Preserved Excel and original Checkout files remain outside the new commits.
+
+## README review — 2026-11-18
+
+The root README now distinguishes public-demo manual work from controlled Docker-based automation, leads with the dated 31 Pass / 6 Blocked / 1 Skipped follow-up, preserves the historical workbook counts, and links the latest verified normal/demo runs. It explains intentional failures, lists implemented coverage and limits, and provides the disposable CI reproduction command. Dedicated API/database testing remains outside implemented coverage; PostgreSQL is identified as environment infrastructure.
+
+The tester chose to handle the GitHub profile README separately and requested a local commit for the project README review. Only the root README and this handoff note belong to that commit. Verification checked relative links, Markdown fences, whitespace, and protected file hashes. No automation changed, so Maven was not rerun. No push was requested for this review.

@@ -1,31 +1,71 @@
 # nopCommerce QA Testing Portfolio
 
-A QA portfolio for nopCommerce covering risk-based test planning, manual execution, requirements traceability, and automated storefront smoke tests. The automated suite uses a disposable Docker environment with sample data. [Public demo used for manual testing](https://demo.nopcommerce.com/)
+A hands-on QA portfolio covering test planning, manual execution, requirements traceability, defect triage, and Selenium UI automation for nopCommerce.
 
-Open the live report dashboard for the latest smoke run, module summaries, searchable test results, and masked failure screenshots. Intentional demonstration failures are clearly labeled. [Live test report](https://phuctan153.github.io/nopcommerce-qa/)
+**[View the live test report](https://phuctan153.github.io/nopcommerce-qa/)** · [Manual follow-up results](docs/test-execution/FOLLOW_UP_2026-11-17.md) · [Automation run guide](automation/README.md)
 
-## Results
+Manual checks use the [public demo storefront](https://demo.nopcommerce.com/). Automated smoke tests run against nopCommerce 4.90.7 in a controlled Docker environment with PostgreSQL, sample products, and disposable shopper accounts.
 
-- **Manual testing.** The historical 38-case workbook reports 28 Pass, 3 Fail, 5 Blocked, and 2 Skipped. A dated follow-up passed all three former Fail scenarios with valid new fixtures; the original observations remain unsubstantiated defect reports. Recovery and other coverage gaps are recorded explicitly. [Execution workbook](docs/test-execution/Test_Execution.xlsx) · [New follow-up results](docs/test-execution/FOLLOW_UP_2026-11-17.md) · [Triage review](docs/bug-reports/QA-007.2_TRIAGE.md)
-- **UI automation.** Implemented 11 Selenium browser cases and 3 configuration checks using Java, TestNG, Maven, and the Page Object Model. The full suite passed **14/14** on local nopCommerce 4.90.7 with Chrome headless. [Automation guide](automation/README.md)
-- **Continuous integration.** GitHub Actions provisions nopCommerce and PostgreSQL, creates disposable shopper accounts, runs the smoke suite, and uploads Surefire reports. The first hosted run passed and published the report artifact. [Successful GitHub Actions run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/42780134311)
-- **Failure evidence verification.** Intentional failures retain their TestNG Fail results and screenshots. CI succeeds only after verifying the exact expected failures and valid evidence; the dashboard shows test results, verification, and deployment separately. [Successful verification run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/44037419784)
+## Verified results
 
-The browser suite covers sign-in and sign-out, catalog search and navigation, product details, and cart add, update, removal, and subtotal behavior. The manual checkout scope ends at the pre-submit review.
+Results below were verified on **2026-11-17**. Manual results and automated checks are separate sets of coverage.
 
-## Review the portfolio
+| Verification | Result | Evidence |
+| --- | --- | --- |
+| Public storefront manual follow-up | **38 cases: 31 Pass, 6 Blocked, 1 Skipped** | [Dated execution record and evidence](docs/test-execution/FOLLOW_UP_2026-11-17.md) |
+| Default automated suite | **14/14 passed:** 11 Selenium browser cases and 3 configuration checks | [Successful normal CI run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/44051754267) |
+| Failure screenshot demonstration | **14 Pass, 2 intentional Fail, 0 Skip;** screenshot verification and deployment succeeded | [Successful demonstration run](https://github.com/phuctan153/nopcommerce-qa/actions/runs/44052146636) |
+| Report presentation | Visually checked at 320, 390, 768, and 1440px viewport widths; both screenshot viewers worked | [Responsive review and evidence](docs/manual/PORTFOLIO_REVIEW.md) |
 
-| Artifact | What it shows |
+The [historical execution workbook](docs/test-execution/Test_Execution.xlsx) retains its original **28 Pass, 3 Fail, 5 Blocked, 2 Skipped**. The later follow-up is a separate run. The three historical Fail observations lacked confirmed fixtures/preconditions; all three scenarios passed with valid new fixtures. No confirmed nopCommerce defect has been filed. [Triage findings](docs/bug-reports/QA-007.2_TRIAGE.md)
+
+## What this project demonstrates
+
+- **Manual QA:** risk-based planning, 33 scenarios, 38 detailed test cases, synthetic test data, requirements traceability, dated execution records, and evidence-based triage.
+- **Browser automation:** Java, Selenium WebDriver, TestNG, Maven, and Page Object Model. Tests use explicit waits, an independent browser session per case, and teardown that runs after failures.
+- **CI and reporting:** GitHub Actions provisions a fresh storefront/database and shopper accounts, runs the suite, uploads Surefire artifacts, and deploys a searchable report to GitHub Pages.
+- **Failure investigation:** screenshots are captured before WebDriver closes, with sensitive storefront fields masked. The report provides per-test evidence viewers and separates test outcomes, automation verification, and deployment status.
+
+The 11 Selenium cases cover login/logout, positive and empty-result search, category/subcategory navigation, product details, and cart add, quantity update, removal, and subtotal reconciliation. Manual coverage also includes registration validation and checkout through the pre-submit review.
+
+## Reading the demonstration report
+
+The published demonstration intentionally keeps two failed assertions so reviewers can inspect real failure screenshots. Those rows are labeled **Intentional failure**; they are not reported nopCommerce bugs.
+
+The normal suite requires all 14 checks to pass with zero skips. Demo mode succeeds only when those 14 checks pass, the two named demo assertions fail exactly as expected, and both masked screenshots are valid. Unexpected failures still fail CI. Raw TestNG results remain unchanged, and deployment has its own status.
+
+A later normal run can replace the demonstration with ordinary smoke results. Use the report's workflow link to identify the run being displayed.
+
+## Review the artifacts
+
+| Artifact | What to inspect |
 | --- | --- |
-| [Test plan](docs/manual/TEST_PLAN.md) and [risk assessment](docs/manual/RISK_ASSESSMENT.md) | Scope, priorities, and test approach |
-| [Test scenarios](docs/test-cases/Test_Scenarios.xlsx), [test cases](docs/test-cases/Test_Cases.xlsx), and [test data](docs/test-cases/Test_Data.xlsx) | Preconditions, steps, expected results, and synthetic data |
+| [Test plan](docs/manual/TEST_PLAN.md), [risk assessment](docs/manual/RISK_ASSESSMENT.md), and [functional checklist](docs/manual/FUNCTIONAL_CHECKLIST.md) | Scope, priorities, test approach, and observed behavior |
+| [Scenarios](docs/test-cases/Test_Scenarios.xlsx), [test cases](docs/test-cases/Test_Cases.xlsx), and [test data](docs/test-cases/Test_Data.xlsx) | Preconditions, steps, expected results, and fixture rules |
 | [Requirements traceability matrix](docs/test-cases/RTM.xlsx) | Links between requirements, scenarios, and cases |
-| [Sample cart evidence](docs/test-execution/evidence/Cart/TC-CART-007_20261109_01.png) | Manual subtotal reconciliation for `TC-CART-007` |
-| [Selenium tests](automation/src/test/java/com/nopcommerce/qa/tests) and [Page Objects](automation/src/test/java/com/nopcommerce/qa/pages) | Test assertions, browser interactions, and explicit waits |
-| [GitHub Actions workflow](.github/workflows/smoke.yml) and [CI script](automation/ci/run-smoke.py) | Runner setup, storefront provisioning, and report upload |
+| [Manual follow-up](docs/test-execution/FOLLOW_UP_2026-11-17.md) and [triage review](docs/bug-reports/QA-007.2_TRIAGE.md) | Actual results, sanitized evidence, and unresolved prerequisites |
+| [Selenium tests](automation/src/test/java/com/nopcommerce/qa/tests) and [Page Objects](automation/src/test/java/com/nopcommerce/qa/pages) | Assertions, reusable browser interactions, and explicit waits |
+| [GitHub Actions workflow](.github/workflows/smoke.yml) and [CI runner](automation/ci/run-smoke.py) | Disposable environment setup, outcome verification, and artifact handling |
 
-## Run the smoke suite
+## Run the automation
 
-Use JDK 17 or later, Maven 3.9 or later, Docker, and Chrome or Microsoft Edge. Follow the local instructions to start nopCommerce, load the shopper fixtures, and view the Surefire report. [Local run instructions](automation/README.md#run-the-full-suite-locally)
+Prerequisites: **JDK 17+, Maven 3.9+, Docker, Python 3, and Chrome** for the CI reproduction script. From the repository root, with Docker running:
 
-For a CI run, open the workflow summary and download `storefront-smoke-reports` under **Artifacts** while it is available. Open `index.html` after extracting it. [GitHub Actions run instructions](automation/README.md#run-in-github-actions)
+```powershell
+python automation/ci/run-smoke.py
+```
+
+The script creates a disposable nopCommerce/PostgreSQL environment and shopper fixtures, runs the normal suite, and removes its Compose project and volumes afterward. It writes results under `automation/target/surefire-reports/`.
+
+To use the persistent local QA environment or Microsoft Edge, follow the [full local setup and browser instructions](automation/README.md#run-the-full-suite-locally). Keep credentials in the ignored local environment file or CI secrets.
+
+On GitHub Actions, download **storefront-smoke-reports** from a run's **Artifacts** while available (14-day retention). Extract it and open `index.html`; failure images are included when captured. [CI and report instructions](automation/README.md#run-in-github-actions)
+
+## Scope and limitations
+
+- The six Blocked follow-up cases comprise four mail/recovery cases without a controlled inbox, one missing-password feedback expectation requiring clarification, and one upper-quantity boundary without a safe confirmed fixture. The automatic-shipping case is Skipped because its prerequisite was absent for the selected cart/destination.
+- Checkout stops before final order submission. No real payment details are used, and post-submit order confirmation is outside the public-demo scope.
+- Hosted automation is verified with Chrome headless. Viewport checks are browser emulation, not physical-device or cross-browser certification.
+- PostgreSQL supports the QA environment. Dedicated API and database assertion suites are outside this project's implemented coverage.
+
+See the [task tracker](docs/TASKS.md) and [handoff](docs/HANDOFF.md) for verification history and remaining gaps.
